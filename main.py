@@ -76,9 +76,9 @@ def menu_gerenciar_eventos(biblioteca):
 
 def menu_gerenciar_membros(biblioteca):
     print("\n--- Gerenciar Membros ---")
-    print("1. Cadastrar Novo Membro")
-    print("2. Listar Membros")
-    print("3. Gerenciar Multas")
+    print("1. Cadastrar novo membro")
+    print("2. Listar membros")
+    print("3. Gerenciar multas")
     print("4. Voltar")
     escolha = input("Escolha uma opção: ")
 
@@ -103,29 +103,36 @@ def menu_gerenciar_membros(biblioteca):
         print("Opção inválida. Por favor, escolha uma opção válida.")
 
 def menu_gerenciar_itens(biblioteca):
-    print("\n--- Gerenciar Itens (Livros/Revistas) ---")
-    print("1. Cadastrar Novo Livro")
-    print("2. Listar Livros")
-    print("3. Voltar")
+    print("\n--- Gerenciar itens (Livros/Revistas) ---")
+    print("1. Cadastrar novo livro")
+    print("2. Listar livros")
+    print("3. Empréstimo de livro")
+    print("4. Voltar")
     escolha = input("Escolha uma opção: ")
 
     if escolha == '1':
         titulo = input("Digite o título do livro: ")
         autor = input("Digite o autor do livro: ")
-        isbn = input("Digite o ISBN do livro: ")
         editora = input("Digite a editora do livro: ")
         genero = input("Digite o gênero do livro: ")
         total_exemplares = int(input("Digite o número total de exemplares: "))
-        biblioteca.cadastrar_livro(titulo, autor, isbn, editora, genero, total_exemplares)
+        biblioteca.cadastrar_item(titulo, autor, editora, genero, total_exemplares)
     elif escolha == '2':
         print("\n--- Lista de Livros ---")
-        if not biblioteca.livros:
+        if not biblioteca.item:
             print("Nenhum livro cadastrado.")
         else:
-            for livro in biblioteca.livros:
+            for livro in biblioteca.item:
                 print(livro)
                 print("-" * 20)
     elif escolha == '3':
+        email = input("Digite o email do membro: ")
+        titulo = input("Digite o título do livro: ")
+        data_emprestimo = datetime.now()
+        data_devolucao_prevista = data_emprestimo + timedelta(days=14) 
+        biblioteca.realizar_emprestimo(email, titulo, data_emprestimo, data_devolucao_prevista)
+
+    elif escolha == '4':
         return
     else:
         print("Opção inválida. Por favor, escolha uma opção válida.")
@@ -135,9 +142,8 @@ def menu_principal(biblioteca):
         print("\n--- Menu Principal da Biblioteca ---")
         print("1. Gerenciar Membros")
         print("2. Gerenciar Itens (Livros/Revistas)")
-        print("3. Realizar Empréstimo")
-        print("4. Gerenciar Eventos")
-        print("5. Sair")
+        print("3. Gerenciar Eventos")
+        print("4. Sair")
         
         escolha = input("Escolha uma opção: ")
         
@@ -146,22 +152,8 @@ def menu_principal(biblioteca):
         elif escolha == '2':
             menu_gerenciar_itens(biblioteca) 
         elif escolha == '3':
-            try:
-                id_membro = int(input("Digite o ID do membro: "))
-                isbn_livro = input("Digite o ISBN do livro: ")
-
-                data_emprestimo = datetime.now().date()
-                data_devolucao_prevista = data_emprestimo + timedelta(days=14)
-                
-                biblioteca.realizar_emprestimo(id_membro, isbn_livro, data_emprestimo, data_devolucao_prevista)
-            except ValueError:
-                print("ERRO: ID do membro deve ser um número.")
-            except Exception as e:
-                print(f"Ocorreu um erro inesperado: {e}")
-
-        elif escolha == '4':
             menu_gerenciar_eventos(biblioteca)
-        elif escolha == '5':
+        elif escolha == '4':
             print("Saindo do sistema. Até logo!")
             sys.exit(0)
         else:

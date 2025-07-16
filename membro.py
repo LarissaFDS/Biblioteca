@@ -1,23 +1,21 @@
 '''
-    Atributos: nome, id, endereco, contato.
+    Atributos: nome, id, endereco, email.
     Métodos: pegar emprestado (livro), devolver (livro), pagar multa (multa).
 '''
 
 class Membro:
-    def __init__(self, nome: str, id: str, endereco: str, email: str):
+    def __init__(self, nome: str, endereco: str, email: str):
         #Inicializa um novo objeto da classe.
         self.nome = nome
-        self.id = id
         self.endereco = endereco
-        self.contato = email
+        self.email = email
 
 
     def __str__(self):
         return (
-            f"Membro: {self.nome}\n"
-            f"  - ID: {self.id}\n"
+            f"  - Membro: {self.nome}\n"
             f"  - Endereço: {self.endereco}\n"
-            f"  - Contato: {self.contato}"
+            f"  - Email: {self.email}"
         )
 
     def pegar_emprestado(self, livro):

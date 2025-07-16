@@ -4,13 +4,12 @@
 '''
 
 class Item:
-    def __init__(self, titulo: str, autor: str, isbn: str, editora: str, genero: str, total_exemplares: int):
+    def __init__(self, titulo: str, autor: str, editora: str, genero: str, total_exemplares: int):
         
         #Inicializa um novo objeto da classe.
 
         self.titulo = titulo
         self.autor = autor
-        self.isbn = isbn
         self.editora = editora
         self.genero = genero
         self.total_exemplares = total_exemplares
@@ -18,16 +17,15 @@ class Item:
 
     def __str__(self):
         return (
-            f"'{self.titulo}' por {self.autor}\n"
+            f"  - '{self.titulo}' por {self.autor}\n"
             f"  - Gênero: {self.genero}\n"
-            f"  - ISBN: {self.isbn}\n"
             f"  - Exemplares: {self.exemplares_disponiveis} de {self.total_exemplares} disponíveis"
         )
 
     def verificar_disponibilidade(self) -> bool:
         return self.exemplares_disponiveis > 0
 
-    def emprestar(self) -> bool:
+    def emprestar(self):
         #Registra o empréstimo de um exemplar, diminuindo a quantidade de disponíveis.
         if self.verificar_disponibilidade():
             self.exemplares_disponiveis -= 1
