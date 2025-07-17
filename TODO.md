@@ -51,10 +51,10 @@
     Biblioteca
         Atributos: lista de livros, lista de membros, lista de emprestimos.
         Métodos:
-            -buscar livro(criterio, valor) (aqui entra a sua classe Busca)
-            -cadastrar membro(nome, ...) (aqui entra seu Gerenciamento de Membros)
-            -realizar emprestimo(idMembro, idLivro) (aqui entra seu Empréstimo e devolução)
+            -buscar livro(criterio, valor)
+            -cadastrar membro(nome, ...) 
+            -realizar emprestimo(idMembro, idLivro) 
             -realizar devolucao(idEmprestimo)
-            -verificar atrasos() (aqui entra a Notificação)
-            -agendar evento(nome, ...) (aqui entra seu Gerenciamento de Eventos)
-            -gerar relatorio e uso() (aqui entra o que você chamou de Debug) 
+            -verificar atrasos() 
+            -agendar evento(nome, ...) 
+            -gerar relatorio e uso() 

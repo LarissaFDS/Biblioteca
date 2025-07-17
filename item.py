@@ -29,16 +29,16 @@ class Item:
         #Registra o empréstimo de um exemplar, diminuindo a quantidade de disponíveis.
         if self.verificar_disponibilidade():
             self.exemplares_disponiveis -= 1
-            print(f"INFO: Empréstimo do livro '{self.titulo}' realizado com sucesso.")
+            print(f"Empréstimo do livro '{self.titulo}' realizado com sucesso.")
             return True
         else:
-            print(f"ALERTA: Não há exemplares de '{self.titulo}' disponíveis para empréstimo.")
+            print(f"Não há exemplares de '{self.titulo}' disponíveis para empréstimo.")
             return False
 
     def devolver(self):
         #Registra a devolução de um exemplar, aumentando a quantidade de disponíveis.
         if self.exemplares_disponiveis < self.total_exemplares:
             self.exemplares_disponiveis += 1
-            print(f"INFO: Devolução do livro '{self.titulo}' registrada com sucesso.")
+            print(f"Devolução do livro '{self.titulo}' registrada com sucesso.")
         else:
-            print(f"ALERTA: Todos os exemplares de '{self.titulo}' já se encontram no acervo.")
+            print(f"Todos os exemplares de '{self.titulo}' já se encontram no acervo.")

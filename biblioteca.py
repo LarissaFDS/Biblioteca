@@ -1,20 +1,22 @@
 '''
         Atributos: lista de item, lista de membros, lista de emprestimos.
         Métodos:
-            -buscar item(criterio, valor) (aqui entra a sua classe Busca)
-            -cadastrar membro(nome, ...) (aqui entra seu Gerenciamento de Membros)
-            -realizar emprestimo(idMembro, iditem) (aqui entra seu Empréstimo e devolução)
-            -realizar devolucao(idEmprestimo)
-            -verificar atrasos() (aqui entra a Notificação)
-            -agendar evento(nome, ...) (aqui entra seu Gerenciamento de Eventos)
-            -gerar relatorio e uso() (aqui entra o que você chamou de Debug) 
+            -buscar item(criterio, valor) 
+            -cadastrar membro(nome, ...) 
+            -realizar emprestimo(idMembro, iditem) 
+            -realizar devolucao
+            -verificar atrasos() 
+            -agendar evento(nome, ...) 
+            -gerar relatorio e uso() 
 '''
 from item import Item
 from membro import Membro
 from multa import Multa
 from emprestimo import Emprestimo
+from reserva import Reserva
 from evento import Evento
 from datetime import datetime, timedelta
+
 
 
 class Biblioteca:
@@ -22,6 +24,7 @@ class Biblioteca:
         self.item = []  
         self.membros = []  
         self.emprestimos = []
+        self.reservas = []
         self.eventos = []
         self.multas = []
         self._proximo_id_emprestimo = 1
@@ -42,18 +45,18 @@ class Biblioteca:
         novo_item = Item(titulo, autor, editora, genero, total_exemplares)
         self.item.append(novo_item)
         
-        print(f"INFO: item '{titulo}' cadastrado com sucesso.")
+        print(f"item '{titulo}' cadastrado com sucesso.")
         return novo_item
 
     def cadastrar_membro(self, nome, endereco, email):
         if email in self.membros:
-            print(f"ERRO: Membro com email {email} já cadastrado.")
+            print(f"Membro com email {email} já cadastrado.")
             return None
         
         novo_membro = Membro(nome, endereco, email)
         self.membros.append(novo_membro)
 
-        print(f"INFO: {novo_membro.nome} cadastrado com sucesso.")
+        print(f"{novo_membro.nome} cadastrado com sucesso.")
         return novo_membro
     
     def membros(self, nome, endereco, email):
@@ -67,18 +70,39 @@ class Biblioteca:
         item = next((i for i in self.item if i.titulo == titulo), None)
 
         if not membro:
-            print(f"ERRO: Membro com email {email} não encontrado.")
+            print(f"Membro com email {email} não encontrado.")
             return None
   
         #fazer a lógica de empréstimo
-        if not item or not item.verificar_disponibilidade():
-            print(f"ERRO: Item '{titulo}' não disponível para empréstimo.")
+        if not item:
+            print(f"Item '{titulo}' não cadastrado.")
             return None
-        emprestimo = Emprestimo(item, membro, data_emprestimo, data_devolucao_prevista)
-        self.emprestimos.append(emprestimo)
+        
+        if not item.verificar_disponibilidade():
+            print(f"Item '{titulo}' não disponível para empréstimo atualmente.")
+            opcao = input("Deseja reservar o item para retirada posterior? (sim/não): ").strip().lower()            
+            if opcao == 'sim':
+                reserva = Reserva(item, membro, data_emprestimo)
+                reserva.confirmar_reserva()
+                self.reservas.append(reserva)
+                return reserva
+            else:
+                print("Empréstimo não realizado.")
+                return None
+        if item.emprestar():       
+            emprestimo = Emprestimo(item, membro, data_emprestimo, data_devolucao_prevista)
+            self.emprestimos.append(emprestimo)
 
-        print(f"INFO: Empréstimo realizado com sucesso para {membro.nome}- Livro: {item.titulo} - Data de Devolução Prevista: {data_devolucao_prevista}")
-        item.emprestar()    
+            print(emprestimo)
+        
+    def listar_reservas(self):
+        if not self.reservas:
+            print("Nenhum livro reservado.")
+        else:
+            print("\n--- Lista de reservas ---")
+            for reserva in self.reservas:
+                print(reserva)
+                print("-" * 20)
 
     def realizar_devolucao(self, id_emprestimo):
         # Implementar lógica de devolução

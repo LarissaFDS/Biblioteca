@@ -11,7 +11,7 @@ class Multa:
         
     def __str__(self):
         return (
-            f"Multa {'paga' if self.pago else 'pendente'}:\n"
+            f"   Multa {'paga' if self.pago else 'pendente'}:\n"
             f"  - Empréstimo atrasado: {'Sim' if self.emprestimo_atrasado else 'Não'}\n"
             f"  - Valor: R$ {self.valor:.2f}"
         )

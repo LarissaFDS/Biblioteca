@@ -11,7 +11,7 @@ class Evento:
 
     def __str__(self):
         return (
-            f"Evento: {self.nome}\n"
+            f"  Evento: {self.nome}\n"
             f"  - Descrição: {self.descricao}\n"
             f"  - Data: {self.data}\n"
             f"  - Local: {self.local}"

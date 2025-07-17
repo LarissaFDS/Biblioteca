@@ -18,7 +18,8 @@ class Emprestimo:
     def __str__(self):
         return (
             f"  - Empréstimo de '{self.livro.titulo}' por {self.membro.nome}:\n"
-            f"  - Data de Empréstimo: {self.data_emprestimo}\n"
-            f"  - Data Prevista de Devolução: {self.data_devolucao_prevista}"
+            f"  - Data de Empréstimo: {self.data_emprestimo.strftime('%d/%m/%Y')}\n"
+            f"  - Data Prevista de Devolução: {self.data_devolucao_prevista.strftime('%d/%m/%Y')}"
         )
+
     
