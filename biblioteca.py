@@ -17,8 +17,6 @@ from reserva import Reserva
 from evento import Evento
 from datetime import datetime, timedelta
 
-
-
 class Biblioteca:
     def __init__(self):
         self.item = []  
@@ -56,7 +54,7 @@ class Biblioteca:
         novo_membro = Membro(nome, endereco, email)
         self.membros.append(novo_membro)
 
-        print(f"{novo_membro.nome} cadastrado com sucesso.")
+        print(f"\t{novo_membro.nome} cadastrado com sucesso!")
         return novo_membro
     
     def membros(self, nome, endereco, email):
@@ -78,6 +76,19 @@ class Biblioteca:
             print(f"Item '{titulo}' não cadastrado.")
             return None
         
+        #regra de limite de empréstimos
+        emprestimos_membro = [e for e in self.emprestimos if e.membro.email == email]
+        if len(emprestimos_membro) >= 3:
+            print(f"\t{membro.nome} já possui 3 empréstimos ativos.")
+            return None
+        
+        #regra de um exemplar por membro
+        for e in emprestimos_membro:
+            if e.livro.titulo == titulo and e.data_devolucao_prevista > datetime.now():
+                print(f"\t{membro.nome} já possui o livro '{titulo}' emprestado.")
+                return None
+        
+        #verifica se o item está disponível
         if not item.verificar_disponibilidade():
             print(f"Item '{titulo}' não disponível para empréstimo atualmente.")
             opcao = input("Deseja reservar o item para retirada posterior? (sim/não): ").strip().lower()            

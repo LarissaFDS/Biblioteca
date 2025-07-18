@@ -7,7 +7,6 @@ class Item:
     def __init__(self, titulo: str, autor: str, editora: str, genero: str, total_exemplares: int):
         
         #Inicializa um novo objeto da classe.
-
         self.titulo = titulo
         self.autor = autor
         self.editora = editora
@@ -26,7 +25,7 @@ class Item:
         return self.exemplares_disponiveis > 0
 
     def emprestar(self):
-        #Registra o empréstimo de um exemplar, diminuindo a quantidade de disponíveis.
+        #Registra o empréstimo de um exemplar, diminuindo a quantidade disponíveis.
         if self.verificar_disponibilidade():
             self.exemplares_disponiveis -= 1
             print(f"Empréstimo do livro '{self.titulo}' realizado com sucesso.")
@@ -36,7 +35,7 @@ class Item:
             return False
 
     def devolver(self):
-        #Registra a devolução de um exemplar, aumentando a quantidade de disponíveis.
+        #Registra a devolução de um exemplar, aumentando a quantidade disponíveis.
         if self.exemplares_disponiveis < self.total_exemplares:
             self.exemplares_disponiveis += 1
             print(f"Devolução do livro '{self.titulo}' registrada com sucesso.")

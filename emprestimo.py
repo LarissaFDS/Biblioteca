@@ -11,9 +11,9 @@ class Emprestimo:
         self.data_devolucao_prevista = data_devolucao_prevista
 
     def calcular_dias_atraso(self, data_devolucao):
-        # Calcula a diferença em dias entre a data de devolução e a data prevista
+        #Calcula a diferença em dias entre a data de devolução e a data prevista
         atraso = (data_devolucao - self.data_devolucao_prevista).days
-        return max(0, atraso)  # Retorna 0 se não houver atraso
+        return max(0, atraso)  #Retorna 0 se não houver atraso
     
     def __str__(self):
         return (

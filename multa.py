@@ -4,7 +4,6 @@
 
 class Multa:
     def __init__(self, emprestimo_atrasado: bool, valor: float):
-        # Inicializa um novo objeto da classe.
         self.emprestimo_atrasado = emprestimo_atrasado
         self.valor = valor
         self.pago = False
