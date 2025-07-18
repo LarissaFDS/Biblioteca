@@ -1,14 +1,14 @@
 from datetime import datetime, timedelta
 import unicodedata
+import random
 
 def remover_acentos(texto):
     return ''.join(
         c for c in unicodedata.normalize('NFD', texto)
         if unicodedata.category(c) != 'Mn').lower()
-
+    
 class Membro:
     def __init__(self, nome: str, endereco: str, email: str):
-        #Inicializa um novo objeto da classe.
         self.nome = nome
         self.endereco = endereco
         self.email = email
@@ -143,7 +143,7 @@ class Biblioteca:
         resultados = []
         valor_busca_lower = valor_busca.lower()
 
-        # Itera sobre a lista de itens da própria biblioteca (self.item)
+        #Itera sobre a lista de itens da própria biblioteca (self.item)
         for item in self.item:
             if criterio == 'titulo' and valor_busca_lower in remover_acentos(item.titulo):
                 resultados.append(item)
@@ -225,12 +225,45 @@ class Biblioteca:
                 print(reserva)
                 print("-" * 20)
 
-    def realizar_devolucao(self, email, titulo, data_devolucao):
-        # Implementar lógica de devolução
-        pass
+    def realizar_devolucao(self, email, titulo):
+        membro = next((m for m in self.membros if m.email == email), None)
+        titulo_normalizado = remover_acentos(titulo)
+        emprestimo = next((e for e in self.emprestimos if remover_acentos(e.livro.titulo) == titulo_normalizado and e.membro.email == email), None)
+
+        if not membro:
+            print(f"Membro com email {email} não encontrado.")
+            return None
+
+        if not emprestimo:
+            print(f"Empréstimo de '{titulo}' não encontrado para o membro {membro.nome}.")
+            return None
+
+        #Simular tempo para verificar atrasos e aplicar multa
+        data_emprestimo = emprestimo.data_emprestimo
+        dias_simulados = random.randint(1, 20)
+        data_atual_simulada = data_emprestimo + timedelta(days=dias_simulados) 
+        
+        if data_atual_simulada > data_emprestimo:
+            dias_atraso = (data_atual_simulada - data_emprestimo).days
+            multa = Multa(True, dias_atraso * 1.5)
+            print(multa)
+        else:  
+            #Devolve o livro, sem penalizar o membro        
+            Item.devolver(emprestimo.livro)
+            self.emprestimos.remove(emprestimo)
+            
+        #Se o livro tiver reservado, notifica o membro e faz o emprestimo
+        for reserva in self.reservas[:]:
+            if remover_acentos(reserva.livro.titulo) == titulo_normalizado:
+                print(f"\nLivro reservado disponível! Notificando {reserva.membro.nome}.")
+                reserva.cancelar_reserva()
+                self.realizar_emprestimo(reserva.membro.email, reserva.livro.titulo, reserva.data_reserva + timedelta(days=14))
+                self.reservas.remove(reserva)
+                break
+            
 
     def verificar_atrasos(self):
-        # Implementar lógica de verificação de atrasos
+        #simluar tempo para verificar atrasos
         pass
 
     def agendar_evento(self, nome, descricao, data, local):
@@ -240,3 +273,37 @@ class Biblioteca:
     def gerar_relatorio_uso(self):
         # Implementar lógica de geração de relatório
         pass
+    # Adicione estes métodos DENTRO da sua classe Biblioteca
+
+    def buscar_membro_por_email(self, email):
+        for membro in self.membros:
+            if membro.email == email:
+                return membro
+        return None
+
+    def listar_emprestimos_do_membro(self, membro):
+        emprestimos_membro = [
+            emp for emp in self.emprestimos 
+            if emp.membro.email == membro.email and not emp.data_devolucao_real
+        ]
+        
+        if not emprestimos_membro:
+            print("Você não possui empréstimos ativos.")
+            return
+
+        for emp in emprestimos_membro:
+            print(f"Livro: {emp.item.titulo}")
+            print(f"Data do Empréstimo: {emp.data_emprestimo.strftime('%d/%m/%Y')}")
+            print(f"Data de Devolução Prevista: {emp.data_devolucao_prevista.strftime('%d/%m/%Y')}")
+            print("-" * 20)
+
+    def listar_multas_do_membro(self, membro):
+        multas_membro = [multa for multa in self.multas if multa.membro.email == membro.email]
+        
+        if not multas_membro:
+            print("Você não possui multas pendentes.")
+            return
+            
+        for multa in multas_membro:
+            print(multa)
+            print("-" * 20)
