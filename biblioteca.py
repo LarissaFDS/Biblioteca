@@ -273,7 +273,6 @@ class Biblioteca:
     def gerar_relatorio_uso(self):
         # Implementar lógica de geração de relatório
         pass
-    # Adicione estes métodos DENTRO da sua classe Biblioteca
 
     def buscar_membro_por_email(self, email):
         for membro in self.membros:
@@ -282,28 +281,7 @@ class Biblioteca:
         return None
 
     def listar_emprestimos_do_membro(self, membro):
-        emprestimos_membro = [
-            emp for emp in self.emprestimos 
-            if emp.membro.email == membro.email and not emp.data_devolucao_real
-        ]
-        
-        if not emprestimos_membro:
-            print("Você não possui empréstimos ativos.")
-            return
-
-        for emp in emprestimos_membro:
-            print(f"Livro: {emp.item.titulo}")
-            print(f"Data do Empréstimo: {emp.data_emprestimo.strftime('%d/%m/%Y')}")
-            print(f"Data de Devolução Prevista: {emp.data_devolucao_prevista.strftime('%d/%m/%Y')}")
-            print("-" * 20)
+        pass
 
     def listar_multas_do_membro(self, membro):
-        multas_membro = [multa for multa in self.multas if multa.membro.email == membro.email]
-        
-        if not multas_membro:
-            print("Você não possui multas pendentes.")
-            return
-            
-        for multa in multas_membro:
-            print(multa)
-            print("-" * 20)
+        pass
