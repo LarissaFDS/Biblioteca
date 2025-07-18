@@ -2,11 +2,8 @@ import sys
 from biblioteca import Biblioteca
 from datetime import datetime, timedelta
 
-from item import Item
-from membro import Membro
-from emprestimo import Emprestimo
-from multa import Multa
-from evento import Evento
+from biblioteca import Evento, Membro, Item, Emprestimo, Multa
+from arcevo_padrao import livros_padrao
 
 
 def menu_cadastrar_membro(biblioteca):
@@ -66,12 +63,13 @@ def menu_gerenciar_membros(biblioteca):
 
 def menu_gerenciar_itens(biblioteca):
     while True:
-        print("\n--- Gerenciar itens ---")
+        print("\n--- Gerenciar arcevo ---")
         print("1. Cadastrar novo livro")
         print("2. Listar livros")
-        print("3. Empréstimo de livro")
-        print("4. Ver reservas")
-        print("5. Voltar")
+        print("3. Buscar livro")
+        print("4. Empréstimo de livro")
+        print("5. Ver reservas")
+        print("6. Voltar")
         escolha = input("Escolha uma opção: ")
 
         if escolha == '1':
@@ -89,18 +87,37 @@ def menu_gerenciar_itens(biblioteca):
                 for livro in biblioteca.item:
                     print(livro)
                     print("-" * 20)
-
+        
         elif escolha == '3':
+                    criterio = input("Buscar por titulo, autor, editora ou genero (digite o critério): ").lower().strip()
+                    valor = input(f"Digite o {criterio} que deseja buscar: ")
+                    
+                    if criterio in ['titulo', 'autor', 'editora', 'genero']:
+                        resultados = biblioteca.buscar_item(criterio, valor)
+                        
+                        if not resultados:
+                            print("\nNenhum item encontrado com esse critério.")
+                        else:
+                            print("\n--- Resultados da Busca ---")
+                            for item in resultados:
+                                print(item)
+                                print("-" * 20)
+                    else:
+                        print("Critério de busca inválido. Por favor, escolha entre: titulo, autor, editora, genero.")
+
+
+        elif escolha == '4':
             email = input("Email do membro: ")
             titulo = input("Título do livro: ")
+            print("-" * 30)
             data_emprestimo = datetime.now()
             data_devolucao_prevista = data_emprestimo + timedelta(days=14)
             biblioteca.realizar_emprestimo(email, titulo, data_emprestimo, data_devolucao_prevista)
 
-        elif escolha == '4':
+        elif escolha == '5':
             biblioteca.listar_reservas()
 
-        elif escolha == '5':
+        elif escolha == '6':
             break
 
         else:
@@ -188,4 +205,7 @@ def menu_principal(biblioteca):
 if __name__ == "__main__":
     biblioteca = Biblioteca()
     print("Bem-vindo ao Sistema de Biblioteca!")
+    
+    for titulo, autor, editora, genero, total_exemplares in livros_padrao:
+        biblioteca.cadastrar_item(titulo, autor, editora, genero, total_exemplares)
     menu_principal(biblioteca)
