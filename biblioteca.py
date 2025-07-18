@@ -1,6 +1,11 @@
 from datetime import datetime, timedelta
 import unicodedata
 
+def remover_acentos(texto):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', texto)
+        if unicodedata.category(c) != 'Mn').lower()
+
 class Membro:
     def __init__(self, nome: str, endereco: str, email: str):
         #Inicializa um novo objeto da classe.
@@ -123,13 +128,7 @@ class Evento:
             f"  - Descrição: {self.descricao}\n"
             f"  - Data: {self.data}\n"
             f"  - Local: {self.local}"
-        )
-    
-def remover_acentos(texto):
-    return ''.join(
-        c for c in unicodedata.normalize('NFD', texto)
-        if unicodedata.category(c) != 'Mn').lower()
-            
+        )   
     
 class Biblioteca:
     def __init__(self):

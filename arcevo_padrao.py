@@ -19,4 +19,6 @@ livros_padrao = [
     ("O Apanhador no Campo de Centeio", "J.D. Salinger", "Ed. do Autor", "Romance", 5),
     ("It: A Coisa", "Stephen King", "Suma", "Terror", 4),
     ("Orgulho e Preconceito", "Jane Austen", "Penguin", "Romance", 5),
+    ("Os Cem Anos de Lenni e Margot", "Marianne Cronin", "Intrínseca", "Romance", 7),
+    ("Maus", "Art Spiegelman", "Companhia das Letras", "História em Quadrinhos", 4),
 ]
