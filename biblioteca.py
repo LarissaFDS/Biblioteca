@@ -77,18 +77,24 @@ class Item:
         else:
             print(f"Todos os exemplares de '{self.titulo}' já se encontram no acervo.")
 
+class Ebook(Item):
+    def __init__(self, titulo, autor, editora, genero, total_exemplares, formato, link_download):
+        super().__init__(titulo, autor, editora, genero, total_exemplares)
+        self.formato = formato
+        self.link_download = link_download
+
+    def __str__(self):
+        return (
+            super().__str__() + f"\n  - Formato: {self.formato}\n  - Link para download: {self.link_download}"
+        )
+
 class Emprestimo:
     def __init__(self, livro, membro, data_emprestimo, data_devolucao_prevista):
         self.livro = livro
         self.membro = membro
         self.data_emprestimo = data_emprestimo
         self.data_devolucao_prevista = data_devolucao_prevista
-
-    def calcular_dias_atraso(self, data_devolucao):
-        #Calcula a diferença em dias entre a data de devolução e a data prevista
-        atraso = (data_devolucao - self.data_devolucao_prevista).days
-        return max(0, atraso)  #Retorna 0 se não houver atraso
-    
+        
     def __str__(self):
         return (
             f"  - Empréstimo de '{self.livro.titulo}' por {self.membro.nome}:\n"
@@ -97,7 +103,7 @@ class Emprestimo:
         )
 
 class Multa:
-    def __init__(self, emprestimo_atrasado: bool, valor: float):
+    def __init__(self, emprestimo_atrasado: Emprestimo, valor: float):
         self.emprestimo_atrasado = emprestimo_atrasado
         self.valor = valor
         self.pago = False
@@ -110,8 +116,8 @@ class Multa:
         
     def __str__(self):
         return (
-            f"   Multa {'paga' if self.pago else 'pendente'}:\n"
-            f"  - Empréstimo atrasado: {'Sim' if self.emprestimo_atrasado else 'Não'}\n"
+            f"   Multa {'paga' if self.pago else 'pendente'} para o livro '{self.emprestimo_atrasado.livro.titulo}':\n"
+            f"  - Membro: {self.emprestimo_atrasado.membro.nome}\n"
             f"  - Valor: R$ {self.valor:.2f}"
         )
 
@@ -236,22 +242,41 @@ class Biblioteca:
 
         if not emprestimo:
             print(f"Empréstimo de '{titulo}' não encontrado para o membro {membro.nome}.")
-            return None
-
+            return None                    
+               
         #Simular tempo para verificar atrasos e aplicar multa
-        data_emprestimo = emprestimo.data_emprestimo
-        dias_simulados = random.randint(1, 20)
-        data_atual_simulada = data_emprestimo + timedelta(days=dias_simulados) 
+        data_real_devolucao = emprestimo.data_devolucao_prevista + timedelta(days=random.randint(-7, 20))
+        dias_atraso = (data_real_devolucao - emprestimo.data_devolucao_prevista).days
         
-        if data_atual_simulada > data_emprestimo:
-            dias_atraso = (data_atual_simulada - data_emprestimo).days
-            multa = Multa(True, dias_atraso * 1.5)
-            print(multa)
-        else:  
-            #Devolve o livro, sem penalizar o membro        
-            Item.devolver(emprestimo.livro)
-            self.emprestimos.remove(emprestimo)
+        if dias_atraso > 0:
+            valor_multa = dias_atraso * 1.5
             
+            #verifica se o membro já possui multa pendente
+            multa = next((m for m in self.multas if m.emprestimo_atrasado == emprestimo), None)
+            if not multa:
+                nova_multa = Multa(emprestimo, valor_multa)
+                self.multas.append(nova_multa)
+                print(nova_multa)
+        
+        #verifica com lista se o membro possui multa pendente  
+        multa = [m for m in self.multas if m.emprestimo_atrasado.membro == membro and not m.pago]        
+        
+        if multa:
+            print(f"\n{membro.nome} possui multa pendente:")
+            for m in multa:
+                print(f" - Multa de R$ {m.valor:.2f} para o livro '{m.emprestimo_atrasado.livro.titulo}'")
+            
+            if input("Deseja pagar todas as multas pendentes agora? (sim/não): ").strip().lower() == 'sim':
+                if all(m.pagar() for m in multa):
+                    print("Multas pagas com sucesso.")
+            else:
+                print("Devolução não realizada devido à multa pendente.")
+                return None
+       
+        #se a multa foi paga ou não existe, realiza a devolução     
+        emprestimo.livro.devolver()
+        self.emprestimos.remove(emprestimo)
+        
         #Se o livro tiver reservado, notifica o membro e faz o emprestimo
         for reserva in self.reservas[:]:
             if remover_acentos(reserva.livro.titulo) == titulo_normalizado:
@@ -260,7 +285,6 @@ class Biblioteca:
                 self.realizar_emprestimo(reserva.membro.email, reserva.livro.titulo, reserva.data_reserva + timedelta(days=14))
                 self.reservas.remove(reserva)
                 break
-            
 
     def verificar_atrasos(self):
         #simluar tempo para verificar atrasos
@@ -281,7 +305,13 @@ class Biblioteca:
         return None
 
     def listar_emprestimos_do_membro(self, membro):
-        pass
+        for emprestimo in self.emprestimos:
+            if emprestimo.membro.email == membro.email:
+                print(emprestimo)
 
     def listar_multas_do_membro(self, membro):
-        pass
+        for multa in self.multas:
+            if multa.emprestimo_atrasado and multa.valor > 0:
+                print(multa)
+            else:
+                print("Nenhuma multa pendente.")

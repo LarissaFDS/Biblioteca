@@ -51,7 +51,7 @@ def menu_gerenciar_membros(biblioteca):
             print("Opção inválida.")
 
 def menu_gerenciar_catalogo(biblioteca):
-    """Submenu para cadastrar, listar e buscar livros no catálogo."""
+    #Submenu para cadastrar, listar e buscar livros no catálogo.
     while True:
         print("\n--- Gerenciar Catálogo ---")
         print("1. Cadastrar novo livro")
@@ -95,7 +95,7 @@ def menu_gerenciar_catalogo(biblioteca):
             print("Opção inválida.")
 
 def menu_gerenciar_circulacao(biblioteca):
-    """Submenu para empréstimos, devoluções, multas e reservas."""
+    #Submenu para empréstimos, devoluções, multas e reservas.
     while True:
         print("\n--- Gerenciar Circulação ---")
         print("1. Realizar empréstimo")
@@ -215,8 +215,8 @@ def menu_membro(biblioteca, membro):
             print("\n--- Meus Empréstimos Ativos ---")
             biblioteca.listar_emprestimos_do_membro(membro)
             
-            devolver = input("\nDeseja devolver um livro? (s/n): ").lower()
-            if devolver == 's':
+            devolver = input("\nDeseja devolver um livro? (sim/não): ").lower()
+            if devolver == 'sim':
                 titulo_livro = input("Digite o título do livro para devolver: ")
                 biblioteca.realizar_devolucao(membro.email, titulo_livro)
         elif escolha == '3':
