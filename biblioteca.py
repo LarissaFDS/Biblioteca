@@ -8,7 +8,7 @@ def remover_acentos(texto):
         if unicodedata.category(c) != 'Mn').lower()
     
 class Membro:
-    def __init__(self, nome: str, endereco: str, email: str):
+    def __init__(self, nome: str, endereco: str, email: str) -> None:
         self.nome = nome
         self.endereco = endereco
         self.email = email
@@ -21,7 +21,7 @@ class Membro:
         )
         
 class Reserva:
-    def __init__(self, livro, membro, data_reserva):
+    def __init__(self, livro, membro, data_reserva) -> None:
         self.livro = livro
         self.membro = membro
         self.data_reserva = data_reserva
@@ -41,7 +41,7 @@ class Reserva:
         )
 
 class Item:
-    def __init__(self, titulo: str, autor: str, editora: str, genero: str, total_exemplares: int):
+    def __init__(self, titulo: str, autor: str, editora: str, genero: str, total_exemplares: int) -> None:
         self.titulo = titulo
         self.autor = autor
         self.editora = editora
@@ -49,17 +49,10 @@ class Item:
         self.total_exemplares = total_exemplares
         self.exemplares_disponiveis = total_exemplares
 
-    def __str__(self):
-        return (
-            f"  - '{self.titulo}' por {self.autor}\n"
-            f"  - Gênero: {self.genero}\n"
-            f"  - Exemplares: {self.exemplares_disponiveis} de {self.total_exemplares} disponíveis"
-        )
-
     def verificar_disponibilidade(self) -> bool:
         return self.exemplares_disponiveis > 0
 
-    def emprestar(self):
+    def emprestar(self) -> bool:
         #Registra o empréstimo de um exemplar, diminuindo a quantidade disponíveis.
         if self.verificar_disponibilidade():
             self.exemplares_disponiveis -= 1
@@ -69,33 +62,40 @@ class Item:
             print(f"Não há exemplares de '{self.titulo}' disponíveis para empréstimo.")
             return False
 
-    def devolver(self):
+    def devolver(self) -> None:
         #Registra a devolução de um exemplar, aumentando a quantidade disponíveis.
         if self.exemplares_disponiveis < self.total_exemplares:
             self.exemplares_disponiveis += 1
             print(f"Devolução do livro '{self.titulo}' registrada com sucesso.")
         else:
             print(f"Todos os exemplares de '{self.titulo}' já se encontram no acervo.")
+    
+    def __str__(self) -> str:
+        return (
+            f"  - '{self.titulo}' por {self.autor}\n"
+            f"  - Gênero: {self.genero}\n"
+            f"  - Exemplares: {self.exemplares_disponiveis} de {self.total_exemplares} disponíveis"
+        )
 
 class Ebook(Item):
-    def __init__(self, titulo, autor, editora, genero, total_exemplares, formato, link_download):
+    def __init__(self, titulo, autor, editora, genero, total_exemplares, formato, link_download) -> None:
         super().__init__(titulo, autor, editora, genero, total_exemplares)
         self.formato = formato
         self.link_download = link_download
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             super().__str__() + f"\n  - Formato: {self.formato}\n  - Link para download: {self.link_download}"
         )
 
 class Emprestimo:
-    def __init__(self, livro, membro, data_emprestimo, data_devolucao_prevista):
+    def __init__(self, livro, membro, data_emprestimo, data_devolucao_prevista) -> None:
         self.livro = livro
         self.membro = membro
         self.data_emprestimo = data_emprestimo
         self.data_devolucao_prevista = data_devolucao_prevista
         
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"  - Empréstimo de '{self.livro.titulo}' por {self.membro.nome}:\n"
             f"  - Data de Empréstimo: {self.data_emprestimo.strftime('%d/%m/%Y')}\n"
@@ -103,32 +103,32 @@ class Emprestimo:
         )
 
 class Multa:
-    def __init__(self, emprestimo_atrasado: Emprestimo, valor: float):
-        self.emprestimo_atrasado = emprestimo_atrasado
+    def __init__(self, emprestimo_atrasado: Emprestimo, valor: float) -> None:
+        self.__emprestimo_atrasado = emprestimo_atrasado
         self.valor = valor
         self.pago = False
         
-    def pagar(self):
+    def pagar(self) -> bool:
         if not self.pago:
             self.pago = True
             return True
         return False
         
-    def __str__(self):
+    def __str__(self) -> str:
         return (
-            f"   Multa {'paga' if self.pago else 'pendente'} para o livro '{self.emprestimo_atrasado.livro.titulo}':\n"
-            f"  - Membro: {self.emprestimo_atrasado.membro.nome}\n"
+            f"   Multa {'paga' if self.pago else 'pendente'} para o livro '{self.__emprestimo_atrasado.livro.titulo}':\n"
+            f"  - Membro: {self.__emprestimo_atrasado.membro.nome}\n"
             f"  - Valor: R$ {self.valor:.2f}"
         )
 
 class Evento:
-    def __init__(self, nome, descricao, data, local):
+    def __init__(self, nome, descricao, data, local) -> None:
         self.nome = nome
         self.descricao = descricao
         self.data = data
         self.local = local
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"  Evento: {self.nome}\n"
             f"  - Descrição: {self.descricao}\n"
@@ -137,7 +137,7 @@ class Evento:
         )   
     
 class Biblioteca:
-    def __init__(self):
+    def __init__(self) -> None:
         self.item = []  
         self.membros = []  
         self.emprestimos = []
@@ -145,7 +145,7 @@ class Biblioteca:
         self.eventos = []
         self.multas = []
 
-    def buscar_item(self, criterio, valor_busca):
+    def buscar_item(self, criterio, valor_busca) -> list:
         resultados = []
         valor_busca_lower = valor_busca.lower()
 
@@ -162,14 +162,14 @@ class Biblioteca:
                     
         return resultados
     
-    def cadastrar_item(self, titulo, autor, editora, genero, total_exemplares):
+    def cadastrar_item(self, titulo, autor, editora, genero, total_exemplares) -> Item:
         novo_item = Item(titulo, autor, editora, genero, total_exemplares)
         self.item.append(novo_item)
         
         print(f"item '{titulo}' cadastrado com sucesso.")
         return novo_item
 
-    def cadastrar_membro(self, nome, endereco, email):
+    def cadastrar_membro(self, nome, endereco, email) -> Membro:
         if email in self.membros:
             print(f"Membro com email {email} já cadastrado.")
             return None
@@ -180,7 +180,7 @@ class Biblioteca:
         print(f"\t{novo_membro.nome} cadastrado com sucesso!")
         return novo_membro
 
-    def realizar_emprestimo(self, email, titulo, data_emprestimo, data_devolucao_prevista):
+    def realizar_emprestimo(self, email, titulo, data_emprestimo, data_devolucao_prevista) -> Reserva:
         membro = next((m for m in self.membros if m.email == email), None)
         
         titulo_normalizado = remover_acentos(titulo)
@@ -220,9 +220,8 @@ class Biblioteca:
             emprestimo = Emprestimo(item, membro, data_emprestimo, data_devolucao_prevista)
             self.emprestimos.append(emprestimo)
             print(emprestimo)
-
         
-    def listar_reservas(self):
+    def listar_reservas(self) -> None:
         if not self.reservas:
             print("Nenhum livro reservado.")
         else:
@@ -231,7 +230,7 @@ class Biblioteca:
                 print(reserva)
                 print("-" * 20)
 
-    def realizar_devolucao(self, email, titulo):
+    def realizar_devolucao(self, email, titulo) -> None:
         membro = next((m for m in self.membros if m.email == email), None)
         titulo_normalizado = remover_acentos(titulo)
         emprestimo = next((e for e in self.emprestimos if remover_acentos(e.livro.titulo) == titulo_normalizado and e.membro.email == email), None)
@@ -286,30 +285,81 @@ class Biblioteca:
                 self.reservas.remove(reserva)
                 break
 
-    def verificar_atrasos(self):
-        #simluar tempo para verificar atrasos
+    def notificar_atrasos(self):
         pass
 
     def agendar_evento(self, nome, descricao, data, local):
-        # Implementar lógica de agendamento de evento
-        pass
+        novo_evento = Evento(nome, descricao, data, local)
+        self.eventos.append(novo_evento)
+        print(f"Evento '{nome}' agendado com sucesso.")
+        return novo_evento
+    
+    def divulgar_eventos(self):
+        if not self.eventos:
+            print("Nenhum evento agendado.")
+            return
+        if not self.membros:
+            print("Nenhum membro cadastrado para notificação.")
+            return
+        
+        #coletar o nome de todos os membros em uma lista
+        nomes_membros = [membro.nome for membro in self.membros]
+        
+        #formatar a string pra exibição, dependendo do número de membros
+        if len(nomes_membros) == 1: #um único membro
+            nomes_membros = nomes_membros[0]
+        elif len(nomes_membros) == 2: #dois membros, então só tem e
+            nomes_membros = " e ".join(nomes_membros)
+        else:#mais de dois membros, então usa vírgula e e
+            nomes_membros = ", ".join(nomes_membros[:-1]) + " e " + nomes_membros[-1]
+        
+        #criei uma lista para limitar a divulgação a 5 eventos
+        eventos_para_divulgar = self.eventos[:5]
+        num_eventos = len(eventos_para_divulgar)
+        
+        print(f"\nDivulgando {num_eventos} evento(s) para os membros: {nomes_membros}")
+        print("-" * 40)
+        for evento in eventos_para_divulgar:
+            print(evento)
+            print("-" * 20)
+    
+    def cancelar_evento(self, nome_evento):
+        nome_evento = remover_acentos(nome_evento)
+        nome_evento = nome_evento.lower()
+        evento = next((e for e in self.eventos if remover_acentos(e.nome).lower() == nome_evento), None)
+        if evento:
+            self.eventos.remove(evento)
+            print(f"Evento '{nome_evento}' cancelado com sucesso.")
+        else:
+            print(f"Evento '{nome_evento}' não encontrado.")
+    
+    def listar_eventos(self):
+        if not self.eventos:
+            print("Nenhum evento agendado.")
+        else:
+            print("\n--- Eventos Agendados ---")
+            for evento in self.eventos:
+                print(evento)
+                print("-" * 20)
 
     def gerar_relatorio_uso(self):
-        # Implementar lógica de geração de relatório
         pass
 
-    def buscar_membro_por_email(self, email):
+    def acessar_ebook(self, titulo):
+        pass
+
+    def buscar_membro_por_email(self, email) -> Membro:
         for membro in self.membros:
             if membro.email == email:
                 return membro
         return None
 
-    def listar_emprestimos_do_membro(self, membro):
+    def listar_emprestimos_do_membro(self, membro) -> None:
         for emprestimo in self.emprestimos:
             if emprestimo.membro.email == membro.email:
                 print(emprestimo)
 
-    def listar_multas_do_membro(self, membro):
+    def listar_multas_do_membro(self, membro) -> None:
         for multa in self.multas:
             if multa.emprestimo_atrasado and multa.valor > 0:
                 print(multa)

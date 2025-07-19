@@ -130,7 +130,9 @@ def menu_gerenciar_eventos(biblioteca):
     while True:
         print("\n--- Gerenciar Eventos (Admin) ---")
         print("1. Agendar evento")
-        print("2. Voltar")
+        print("2. Divulgar eventos")
+        print("3. Cancelar evento")
+        print("4. Voltar")
         escolha = input("Escolha uma opção: ")
 
         if escolha == '1':
@@ -139,8 +141,13 @@ def menu_gerenciar_eventos(biblioteca):
             data = input("Data (DD/MM/AAAA): ")
             local = input("Local: ")
             evento = Evento(nome, descricao, data, local)
-            #implementar 
+            biblioteca.agendar_evento(evento)
         elif escolha == '2':
+            biblioteca.divulgar_eventos()
+        elif escolha == '3':
+            nome_evento = input("Digite o nome do evento a ser cancelado: ")
+            biblioteca.cancelar_evento(nome_evento)
+        elif escolha == '4':
             break
         else:
             print("Opção inválida.")
@@ -163,38 +170,18 @@ def menu_gerenciar_itens(biblioteca):
             break
         else:
             print("Opção inválida.")
+  
             
-
-# --- NOVOS MENUS POR PAPEL ---
-def menu_administrador(biblioteca):
-    while True:
-        print("\n--- Menu do Administrador ---")
-        print("1. Gerenciar Acervo")
-        print("2. Gerenciar Membros")
-        print("3. Gerenciar Eventos")
-        print("4. Fazer Logout")
-        escolha = input("Escolha uma opção: ")
-
-        if escolha == '1':
-            menu_gerenciar_itens(biblioteca)
-        elif escolha == '2':
-            menu_gerenciar_membros(biblioteca)
-        elif escolha == '3':
-            menu_gerenciar_eventos(biblioteca)
-        elif escolha == '4':
-            print("Fazendo logout de administrador...")
-            break
-        else:
-            print("Opção inválida.")
-
-
+# --- Menu do Membro ---            
 def menu_membro(biblioteca, membro):
     while True:
         print(f"\n--- Menu do Membro: {membro.nome} ---")
         print("1. Buscar livro no acervo")
         print("2. Ver meus empréstimos e devolver livro")
         print("3. Ver minhas multas")
-        print("4. Fazer Logout")
+        print("4. Acessar eBook (se disponível)")
+        print("5. Ver eventos")
+        print("6. Fazer Logout")
         escolha = input("Escolha uma opção: ")
 
         if escolha == '1':
@@ -223,13 +210,43 @@ def menu_membro(biblioteca, membro):
             print("\n--- Minhas Multas ---")
             biblioteca.listar_multas_do_membro(membro)
         elif escolha == '4':
+            titulo = input("Digite o título do eBook que deseja acessar: ")
+            biblioteca.acessar_ebook(titulo)
+            #IMPLEMENTAR
+        elif escolha == '5':
+            biblioteca.listar_eventos()
+        
+        elif escolha == '6':
             print("Fazendo logout...")
             break
         else:
             print("Opção inválida.")
+            
+
+# --- NOVOS MENUS POR PAPEL ---
+def menu_administrador(biblioteca):
+    while True:
+        print("\n--- Menu do Administrador ---")
+        print("1. Gerenciar Acervo")
+        print("2. Gerenciar Membros")
+        print("3. Gerenciar Eventos")
+        print("4. Fazer Logout")
+        escolha = input("Escolha uma opção: ")
+
+        if escolha == '1':
+            menu_gerenciar_itens(biblioteca)
+        elif escolha == '2':
+            menu_gerenciar_membros(biblioteca)
+        elif escolha == '3':
+            menu_gerenciar_eventos(biblioteca)
+        elif escolha == '4':
+            print("Fazendo logout de administrador...")
+            break
+        else:
+            print("Opção inválida.")
+
 
 # --- NOVO MENU PRINCIPAL ---
-
 def menu_principal(biblioteca):
     while True:
         print("\n--- Bem-vindo ao Sistema da Biblioteca ---")
