@@ -25,7 +25,7 @@
 -Gerenciamento de Acervo: Acompanhamento e gerenciamento do acervo da biblioteca.                           CHECK
 
 
--Gerenciamento de Eventos: Agendamento e divulgação de eventos da biblioteca.
+-Gerenciamento de Eventos: Agendamento e divulgação de eventos da biblioteca.                               CHECK
 -E-books e Recursos Online: Acesso a recursos digitais e e-books.
 -Relatórios e Análises: Geração de relatórios sobre o uso e as tendências da biblioteca.
 
