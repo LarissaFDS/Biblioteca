@@ -12,21 +12,27 @@
                          
                         Português
 
--Busca no Catálogo: Os usuários podem pesquisar o catálogo da biblioteca por título, autor, gênero, etc.
--Empréstimo e Devolução: Os usuários podem retirar e devolver livros.
--Sistema de Reserva: Os usuários podem reservar livros que estão atualmente emprestados.
--Notificações de Atraso: Notificações automáticas para itens em atraso.
--Gerenciamento de Membros: Cadastro e gerenciamento dos membros da biblioteca.
--Cálculo e Pagamento de Multas: Cálculo e pagamento de multas por atraso.
--Gerenciamento de Acervo: Acompanhamento e gerenciamento do acervo da biblioteca.
--Gerenciamento de Eventos: Agendamento e divulgação de eventos da biblioteca.
+-Busca no Catálogo: Os usuários podem pesquisar o catálogo da biblioteca por título, autor, gênero, etc.    CHECK
+-Empréstimo e Devolução: Os usuários podem retirar e devolver livros.                                       CHECK
+-Sistema de Reserva: Os usuários podem reservar livros que estão atualmente emprestados.                    CHECK
+
+
+-Notificações de Atraso: Notificações automáticas para itens em atraso.                                  
+
+
+-Gerenciamento de Membros: Cadastro e gerenciamento dos membros da biblioteca.                              CHECK
+-Cálculo e Pagamento de Multas: Cálculo e pagamento de multas por atraso.                                   CHECK
+-Gerenciamento de Acervo: Acompanhamento e gerenciamento do acervo da biblioteca.                           CHECK
+
+
+-Gerenciamento de Eventos: Agendamento e divulgação de eventos da biblioteca.                               CHECK
 -E-books e Recursos Online: Acesso a recursos digitais e e-books.
 -Relatórios e Análises: Geração de relatórios sobre o uso e as tendências da biblioteca.
 
 
 # Classes
     Item (para ser mais genérico e incluir revistas, etc.)
-        Atributos: titulo, autor, genero, editora, isbn, nº de exemplares.
+        Atributos: titulo, autor, genero, editora, nº de exemplares.
 
     Ebook (pode herdar de Item)
         Atributos: formato do arquivo, link para download.

@@ -1,14 +1,25 @@
-# Library-Management-System
-A software with classes for books, members, and loans, handling book checkouts, returns, and inventory management.
+📚 Library Management System
+Um software com classes para livros, membros e empréstimos, projetado para gerenciar retiradas, devoluções e o inventário geral da biblioteca.
 
+✨ Funcionalidades
+Implementadas
+[x] Busca no Catálogo: Pesquise a coleção da biblioteca por título, autor, gênero, etc.
 
-• Catalog Search: lists only.
-• Borrow and Return: Users can check out;
-• Reservation System: Users can reserve books that are currently on loan;
-• Overdue Notifications: não implementado.
-• Member Management: Registration and management of library members;
-• Fine Calculation and Payment: não implementado.
-• Inventory Management: Tracking and management of library inventory;
-• Event Management: não implementado.
-• E-books and Online Resources: não implementado.
-• Reporting and Analytics: não implementado.
+[x] Empréstimos e Devoluções: Gerencie a retirada e devolução de livros.
+
+[x] Sistema de Reservas: Faça reservas de livros que estão atualmente emprestados.
+
+[x] Gerenciamento de Membros: Cadastre e gerencie as informações dos membros da biblioteca.
+
+[x] Cálculo de Multas: Calcule e processe multas por atraso na devolução.
+
+[x] Gestão de Inventário: Acompanhe todos os livros e seus status.
+
+Planejadas
+[ ] Notificações de Atraso: Enviar notificações automáticas sobre livros atrasados.
+
+[ ] Gestão de Eventos: Anunciar e gerenciar eventos da biblioteca.
+
+[ ] E-books e Recursos Online: Integrar e gerenciar recursos digitais.
+
+[ ] Relatórios e Análises: Gerar relatórios sobre o uso da biblioteca, livros populares e outras métricas.
