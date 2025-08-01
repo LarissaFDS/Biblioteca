@@ -5,12 +5,12 @@ from classes import Evento, Multa, Ebook, Item, Reserva, Membro, Emprestimo
 
 DIAS_EMPRESTIMO = 14
 MAXIMO_EMPRESTIMO_MEMBRO = 3
-VALOR_MULTA = 1.5
+VALOR_MULTA = 0.5
 
 def remover_acentos(texto):
-    return ''.join(
+    return ''.join([
         c for c in unicodedata.normalize('NFD', texto)
-        if unicodedata.category(c) != 'Mn').lower()
+        if unicodedata.category(c) != 'Mn']).lower()
     
 class Biblioteca:
     def __init__(self) -> None:
@@ -185,6 +185,7 @@ class Biblioteca:
                 self.reservas.remove(reserva)
                 break
 
+
     # ------------------------------ EVENTOS -----------------------------------------------    
     def agendar_evento(self, nome, descricao, data, local, silencioso = False):
         novo_evento = Evento(nome, descricao, data, local)
@@ -242,19 +243,18 @@ class Biblioteca:
                 print(evento)
                 print("-" * 20)
 
+
     #--------------------------------- E-BOOK --------------------------------------------------------
     def acessar_ebook(self, titulo):
         pass
+
 
     # ------------------------------- Verificar TODAS informações da biblioteca -------------------------------
     def notificar_atrasos(self):
         pass
     
-    def verificar_atrasos(self):
+    def verificar_atrasos(self): #isso vai verificar atrasos e gerar multas, entao preciso de um time skip
         pass    
     
     def gerar_relatorio_uso(self):
         pass
-
-    
-        

@@ -144,7 +144,7 @@ def menu_gerenciar_eventos(biblioteca):
             data = input("Data (DD/MM/AAAA): ")
             local = input("Local: ")
             evento = Evento(nome, descricao, data, local)
-            biblioteca.agendar_evento(evento)
+            biblioteca.agendar_evento(nome, descricao, data, local)
         elif escolha == '2':
             biblioteca.divulgar_eventos()
         elif escolha == '3':
@@ -252,7 +252,6 @@ def menu_administrador(biblioteca):
 # --- NOVO MENU PRINCIPAL ---
 def menu_principal(biblioteca):
     while True:
-        print("\n--- Bem-vindo ao Sistema da Biblioteca ---")
         print("1. Entrar como Administrador")
         print("2. Entrar como Membro")
         print("3. Cadastrar novo Membro")

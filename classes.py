@@ -116,7 +116,7 @@ class Ebook(Item):
 
 class Multa:
     def __init__(self, emprestimo_atrasado: Emprestimo, valor: float) -> None:
-        self.__emprestimo_atrasado = emprestimo_atrasado
+        self.emprestimo_atrasado = emprestimo_atrasado
         self.valor = valor
         self.pago = False
         
@@ -128,8 +128,7 @@ class Multa:
         
     def __str__(self) -> str:
         return (
-            f"   Multa {'paga' if self.pago else 'pendente'} para o livro '{self.__emprestimo_atrasado.livro.titulo}':\n"
-            f"  - Membro: {self.__emprestimo_atrasado.membro.nome}\n"
+            f"   Multa {'paga' if self.pago else 'pendente'} para o livro '{self.emprestimo_atrasado.livro.titulo}':\n"
+            f"  - Membro: {self.emprestimo_atrasado.membro.nome}\n"
             f"  - Valor: R$ {self.valor:.2f}"
         )
-
