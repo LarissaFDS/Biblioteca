@@ -1,4 +1,4 @@
-# Library Management System
+## Library Management System
 • Catalog Search: Users can search the library catalog by title, author, genre, etc;
 • Borrow and Return: Users can check out and return books;
 • Reservation System: Users can reserve books that are currently on loan;
@@ -30,37 +30,53 @@
 -Relatórios e Análises: Geração de relatórios sobre o uso e as tendências da biblioteca.
 
 
-# Classes
-    Item (para ser mais genérico e incluir revistas, etc.)
+## Classes
+    # Item (para ser mais genérico e incluir revistas, etc.)
         Atributos: titulo, autor, genero, editora, nº de exemplares.
+        Métodos: Verficar disponibilidade, emprestar, devolver.
 
-    Ebook (pode herdar de Item)
-        Atributos: formato do arquivo, link para download.
+    # Membro
+        Atributos: nome, endereco, contato(email).
+        
+    # Emprestimo
+        Atributos: livro, membro, data_emprestimo, data_devolucao_prevista.
 
-    Membro
-        Atributos: nome, id, endereco, contato.
-        Métodos: pegar emprestado (livro), devolver (livro), pagar multa (multa).
-
-    Emprestimo
-        Atributos: livro, membro, dataEmprestimo, dataDevolucaoPrevista.
-        Métodos: calcular dias de atraso.
-
-    Reserva
-        Atributos: livro, membro, dataReserva.
-
-    Multa
-        Atributos: emprestimo atrasado, valor, status do pagamento.
-
-    Evento
+    # Evento
         Atributos: nome, descricao, data, local.
 
+    # Reserva
+        Atributos: livro, membro, dataReserva.
+        Métodos: confirmar_reserva, cancelar_reserva.
+    
+    # Ebook
+        Atributos: formato do arquivo, link para download.
+        Métodos: baixar_livro, ler_artigo.
+
+    # Multa
+        Atributos: emprestimo_atrasado, valor.
+        Métodos: pagar.
+
     Biblioteca
-        Atributos: lista de livros, lista de membros, lista de emprestimos.
+        Atributos: lista de itens, lista de membros, lista de emprestimos, lista de reservas, lista de eventos, lista de multas.
         Métodos:
-            -buscar livro(criterio, valor)
-            -cadastrar membro(nome, ...) 
-            -realizar emprestimo(idMembro, idLivro) 
-            -realizar devolucao(idEmprestimo)
-            -verificar atrasos() 
-            -agendar evento(nome, ...) 
-            -gerar relatorio e uso() 
+            -cadastrar item
+            -buscar item
+            -listar reserva
+
+            -cadastrar membro
+            -buscar membro (email)
+            -listar emprestimo (membro)
+            -listar multas (membro)
+            
+            -realizar emprestimo
+            -realizar devolução
+            -notificar atrasos
+            
+            -agendar evento
+            -divulgar eventos
+            -cancelar evento
+            -listar evento
+
+            -acessar ebook
+
+            -gerar relatorio de uso

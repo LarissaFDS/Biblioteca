@@ -2,7 +2,10 @@ import sys
 from datetime import datetime, timedelta
 
 from biblioteca import Biblioteca, Evento 
-from arcevo_padrao import livros_padrao
+
+SENHA_ADMIN = "admin123"
+
+
 
 # --- Funções de Submenu ---
 def menu_cadastrar_membro(biblioteca):
@@ -258,7 +261,7 @@ def menu_principal(biblioteca):
 
         if escolha == '1':
             senha = input("Digite a senha de administrador: ")
-            if senha == "admin123":  #Senha fixa para simplificar
+            if senha == SENHA_ADMIN:  #Senha fixa para simplificar
                 print("\nLogin de administrador bem-sucedido!")
                 menu_administrador(biblioteca)
             else:

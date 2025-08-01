@@ -7,11 +7,11 @@ if __name__ == "__main__":
     print("Bem-vindo ao Sistema de Biblioteca!")
     
     for titulo, autor, editora, genero, total_exemplares in livros_padrao:
-        biblioteca.cadastrar_item(titulo, autor, editora, genero, total_exemplares)
+        biblioteca.cadastrar_item(titulo, autor, editora, genero, total_exemplares, silencioso = True)
 
     for nome, descricao, data, local in eventos_padrao:
-        biblioteca.agendar_evento(nome, descricao, data, local)
+        biblioteca.agendar_evento(nome, descricao, data, local, silencioso = True)
     
     for nome, endereco, email in membros_padrao:
-        biblioteca.cadastrar_membro(nome, endereco, email)
+        biblioteca.cadastrar_membro(nome, endereco, email, silencioso = True)
     menu_principal(biblioteca)

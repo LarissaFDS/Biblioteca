@@ -15,10 +15,10 @@ Implementadas
 
 [x] Gestão de Inventário: Acompanhe todos os livros e seus status.
 
+[x] Gestão de Eventos: Anunciar e gerenciar eventos da biblioteca.
+
 Planejadas
 [ ] Notificações de Atraso: Enviar notificações automáticas sobre livros atrasados.
-
-[ ] Gestão de Eventos: Anunciar e gerenciar eventos da biblioteca.
 
 [ ] E-books e Recursos Online: Integrar e gerenciar recursos digitais.
 

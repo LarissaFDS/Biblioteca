@@ -3,6 +3,10 @@ import unicodedata
 import random
 from classes import Evento, Multa, Ebook, Item, Reserva, Membro, Emprestimo
 
+DIAS_EMPRESTIMO = 14
+MAXIMO_EMPRESTIMO_MEMBRO = 3
+VALOR_MULTA = 1.5
+
 def remover_acentos(texto):
     return ''.join(
         c for c in unicodedata.normalize('NFD', texto)
@@ -17,11 +21,19 @@ class Biblioteca:
         self.eventos = []
         self.multas = []
 
+    #------------------------------- ITEM ------------------------------------------------
+    def cadastrar_item(self, titulo, autor, editora, genero, total_exemplares, silencioso = False) -> Item:
+        novo_item = Item(titulo, autor, editora, genero, total_exemplares)
+        self.item.append(novo_item)
+        
+        if not silencioso: #para nao printar o do arcevo
+            print(f"item '{titulo}' cadastrado com sucesso.")
+        return novo_item
+    
     def buscar_item(self, criterio, valor_busca) -> list:
         resultados = []
         valor_busca_lower = valor_busca.lower()
 
-        #Itera sobre a lista de itens da própria biblioteca (self.item)
         for item in self.item:
             if criterio == 'titulo' and valor_busca_lower in remover_acentos(item.titulo):
                 resultados.append(item)
@@ -30,18 +42,21 @@ class Biblioteca:
             elif criterio == 'editora' and valor_busca_lower in remover_acentos(item.editora):
                 resultados.append(item)
             elif criterio == 'genero' and valor_busca_lower in remover_acentos(item.genero):
-                resultados.append(item)
-                    
+                resultados.append(item) 
         return resultados
     
-    def cadastrar_item(self, titulo, autor, editora, genero, total_exemplares) -> Item:
-        novo_item = Item(titulo, autor, editora, genero, total_exemplares)
-        self.item.append(novo_item)
-        
-        print(f"item '{titulo}' cadastrado com sucesso.")
-        return novo_item
+    def listar_reservas(self) -> None:
+        if not self.reservas:
+            print("Nenhum livro reservado.")
+        else:
+            print("\n--- Lista de reservas ---")
+            for reserva in self.reservas:
+                print(reserva)
+                print("-" * 20)
 
-    def cadastrar_membro(self, nome, endereco, email) -> Membro:
+
+    #--------------------------------- MEMBRO -------------------------------------------------------
+    def cadastrar_membro(self, nome, endereco, email, silencioso = False) -> Membro:
         if email in self.membros:
             print(f"Membro com email {email} já cadastrado.")
             return None
@@ -49,9 +64,31 @@ class Biblioteca:
         novo_membro = Membro(nome, endereco, email)
         self.membros.append(novo_membro)
 
-        print(f"\t{novo_membro.nome} cadastrado com sucesso!")
+        if not silencioso: #para nao printar o do arcevo
+            print(f"\t{novo_membro.nome} cadastrado com sucesso!")
         return novo_membro
+    
+    def buscar_membro_por_email(self, email) -> Membro:
+        for membro in self.membros:
+            if membro.email == email:
+                return membro
+        return None
+    
+    def listar_emprestimos_do_membro(self, membro) -> None:
+        for emprestimo in self.emprestimos:
+            if emprestimo.membro.email == membro.email:
+                print(emprestimo)
 
+    def listar_multas_do_membro(self, membro) -> None:
+        for multa in self.multas:
+            if multa.emprestimo_atrasado and multa.valor > 0:
+                print(multa)
+            else:
+                print("Nenhuma multa pendente.")
+    
+
+
+    # ------------------------------ EMPRESTIMO e DEVOLUÇÃO ---------------------------------------
     def realizar_emprestimo(self, email, titulo, data_emprestimo, data_devolucao_prevista) -> Reserva:
         membro = next((m for m in self.membros if m.email == email), None)
         
@@ -67,7 +104,7 @@ class Biblioteca:
             return None
 
         emprestimos_membro = [e for e in self.emprestimos if e.membro.email == email]
-        if len(emprestimos_membro) >= 3:
+        if len(emprestimos_membro) >= MAXIMO_EMPRESTIMO_MEMBRO:
             print(f"\t{membro.nome} já possui 3 empréstimos ativos.")
             return None
 
@@ -93,15 +130,6 @@ class Biblioteca:
             self.emprestimos.append(emprestimo)
             print(emprestimo)
         
-    def listar_reservas(self) -> None:
-        if not self.reservas:
-            print("Nenhum livro reservado.")
-        else:
-            print("\n--- Lista de reservas ---")
-            for reserva in self.reservas:
-                print(reserva)
-                print("-" * 20)
-
     def realizar_devolucao(self, email, titulo) -> None:
         membro = next((m for m in self.membros if m.email == email), None)
         titulo_normalizado = remover_acentos(titulo)
@@ -120,7 +148,7 @@ class Biblioteca:
         dias_atraso = (data_real_devolucao - emprestimo.data_devolucao_prevista).days
         
         if dias_atraso > 0:
-            valor_multa = dias_atraso * 1.5
+            valor_multa = dias_atraso * VALOR_MULTA
             
             #verifica se o membro já possui multa pendente
             multa = next((m for m in self.multas if m.emprestimo_atrasado == emprestimo), None)
@@ -153,17 +181,17 @@ class Biblioteca:
             if remover_acentos(reserva.livro.titulo) == titulo_normalizado:
                 print(f"\nLivro reservado disponível! Notificando {reserva.membro.nome}.")
                 reserva.cancelar_reserva()
-                self.realizar_emprestimo(reserva.membro.email, reserva.livro.titulo, reserva.data_reserva + timedelta(days=14))
+                self.realizar_emprestimo(reserva.membro.email, reserva.livro.titulo, reserva.data_reserva + timedelta(days=DIAS_EMPRESTIMO))
                 self.reservas.remove(reserva)
                 break
 
-    def notificar_atrasos(self):
-        pass
-
-    def agendar_evento(self, nome, descricao, data, local):
+    # ------------------------------ EVENTOS -----------------------------------------------    
+    def agendar_evento(self, nome, descricao, data, local, silencioso = False):
         novo_evento = Evento(nome, descricao, data, local)
         self.eventos.append(novo_evento)
-        print(f"Evento '{nome}' agendado com sucesso.")
+        
+        if not silencioso: #para nao printar o do arcevo
+            print(f"Evento '{nome}' agendado com sucesso.")
         return novo_evento
     
     def divulgar_eventos(self):
@@ -214,26 +242,19 @@ class Biblioteca:
                 print(evento)
                 print("-" * 20)
 
-    def gerar_relatorio_uso(self):
-        pass
-
+    #--------------------------------- E-BOOK --------------------------------------------------------
     def acessar_ebook(self, titulo):
         pass
 
-    def buscar_membro_por_email(self, email) -> Membro:
-        for membro in self.membros:
-            if membro.email == email:
-                return membro
-        return None
+    # ------------------------------- Verificar TODAS informações da biblioteca -------------------------------
+    def notificar_atrasos(self):
+        pass
+    
+    def verificar_atrasos(self):
+        pass    
+    
+    def gerar_relatorio_uso(self):
+        pass
 
-    def listar_emprestimos_do_membro(self, membro) -> None:
-        for emprestimo in self.emprestimos:
-            if emprestimo.membro.email == membro.email:
-                print(emprestimo)
-
-    def listar_multas_do_membro(self, membro) -> None:
-        for multa in self.multas:
-            if multa.emprestimo_atrasado and multa.valor > 0:
-                print(multa)
-            else:
-                print("Nenhuma multa pendente.")
+    
+        
