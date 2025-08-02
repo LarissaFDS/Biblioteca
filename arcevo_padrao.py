@@ -71,4 +71,13 @@ membros_padrao = [
     ("Fernanda Lima", "rua E, 202", "fernanda@email.com"),
     ("Pedro Santos", "rua F, 303", "pedro@email.com"),
 ]
+
+
+ebook_padrao = [
+    ("A escuridão de Kyoshi", "F. C. Yee", "Planeta", "Ficção", "EPUB"),
+    ("Homens, mulheres e filhos", "Chad Kultgrn", "Editora Record", "Romance", "PDF"),
+    ("Codinome Verity", "Elizabeth Wein", "Morro Branco", "Romancce", "EPUB"),
+    ("Os planos secretos do regime", "Israel Neto", "Kitembo", "Distopia", "PDF"),
     
+        
+]

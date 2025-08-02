@@ -57,15 +57,15 @@ class Biblioteca:
 
     #--------------------------------- MEMBRO -------------------------------------------------------
     def cadastrar_membro(self, nome, endereco, email, silencioso = False) -> Membro:
-        if email in self.membros:
-            print(f"Membro com email {email} já cadastrado.")
+        if any(m.email == email for m in self.membros):
+            print(f"\nMembro com email {email} já cadastrado.\n\n")
             return None
         
         novo_membro = Membro(nome, endereco, email)
         self.membros.append(novo_membro)
 
         if not silencioso: #para nao printar o do arcevo
-            print(f"\t{novo_membro.nome} cadastrado com sucesso!")
+            print(f"\n\t{novo_membro.nome} cadastrado com sucesso!\n\n")
         return novo_membro
     
     def buscar_membro_por_email(self, email) -> Membro:
@@ -181,7 +181,7 @@ class Biblioteca:
             if remover_acentos(reserva.livro.titulo) == titulo_normalizado:
                 print(f"\nLivro reservado disponível! Notificando {reserva.membro.nome}.")
                 reserva.cancelar_reserva()
-                self.realizar_emprestimo(reserva.membro.email, reserva.livro.titulo, reserva.data_reserva + timedelta(days=DIAS_EMPRESTIMO))
+                self.realizar_emprestimo(reserva.membro.email, reserva.livro.titulo, reserva.data_reserva + timedelta(days=DIAS_EMPRESTIMO), emprestimo.data_devolucao_prevista)
                 self.reservas.remove(reserva)
                 break
 
@@ -251,10 +251,53 @@ class Biblioteca:
 
     # ------------------------------- Verificar TODAS informações da biblioteca -------------------------------
     def notificar_atrasos(self):
-        pass
+        """Verifica todos os empréstimos e notifica membros com itens atrasados."""
+        hoje = datetime.now()
+        atrasados = [e for e in self.emprestimos if e.data_devolucao_prevista < hoje]
+        if not atrasados:
+            print("Nenhum empréstimo atrasado no momento.")
+            return
+        print("\n--- Notificações de Atraso ---")
+        for emprestimo in atrasados:
+            dias_atraso = (hoje - emprestimo.data_devolucao_prevista).days
+            print(
+                f"⚠️ Membro '{emprestimo.membro.nome}' está com o livro '{emprestimo.livro.titulo}' atrasado há {dias_atraso} dia(s)."
+                f" Data prevista de devolução: {emprestimo.data_devolucao_prevista.strftime('%d/%m/%Y')}"
+            )
+
+       
     
-    def verificar_atrasos(self): #isso vai verificar atrasos e gerar multas, entao preciso de um time skip
-        pass    
+    def verificar_atrasos(self, dias_skip=0):
+        """
+        Verifica todos os empréstimos, gera multas para atrasos e notifica os membros.
+        O parâmetro dias_skip permite simular a passagem do tempo.
+        """
+        hoje = datetime.now() + timedelta(days=dias_skip)
+        atrasados = [e for e in self.emprestimos if e.data_devolucao_prevista < hoje]
+        if not atrasados:
+            print("Nenhum empréstimo atrasado no momento.")
+            return
+
+        print("\n--- Verificação de Atrasos ---")
+        for emprestimo in atrasados:
+            dias_atraso = (hoje - emprestimo.data_devolucao_prevista).days
+            if dias_atraso > 0:
+                valor_multa = dias_atraso * VALOR_MULTA
+                # Verifica se já existe multa para este empréstimo
+                multa_existente = next((m for m in self.multas if m.emprestimo_atrasado == emprestimo), None)
+                if not multa_existente:
+                    nova_multa = Multa(emprestimo, valor_multa)
+                    self.multas.append(nova_multa)
+                    print(
+                        f"⚠️ Membro '{emprestimo.membro.nome}' está com o livro '{emprestimo.livro.titulo}' atrasado há {dias_atraso} dia(s)."
+                        f" Multa gerada: R$ {valor_multa:.2f}."
+                    )
+                else:
+                    print(
+                        f"⚠️ Membro '{emprestimo.membro.nome}' continua com o livro '{emprestimo.livro.titulo}' atrasado há {dias_atraso} dia(s)."
+                        f" Multa já registrada: R$ {multa_existente.valor:.2f}."
+                    )
+  
     
     def gerar_relatorio_uso(self):
         pass

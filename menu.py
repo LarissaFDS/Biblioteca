@@ -14,7 +14,6 @@ def menu_cadastrar_membro(biblioteca):
     endereco = input("Digite o endereço do membro: ")
     email = input("Digite o email do membro: ")
     biblioteca.cadastrar_membro(nome, endereco, email)
-    print("\nMembro cadastrado com sucesso!")
 
 
 def menu_gerenciar_multas(biblioteca):
