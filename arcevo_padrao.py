@@ -87,14 +87,10 @@ membros_padrao = [
 
 #MUDAR O LINK
 ebooks_padrao = [
-    ("A Escuridão de Kyoshi", "F. C. Yee", "Planeta", "Ficção", "EPUB", "http://example.com/kyoshi.epub"),
-    ("Homens, Mulheres e Filhos", "Chad Kultgen", "Editora Record", "Romance", "PDF", "http://example.com/homens.pdf"),
-    ("Codinome Verity", "Elizabeth Wein", "Morro Branco", "Romance", "EPUB", "http://example.com/verity.epub"),
-    ("Os Planos Secretos do Regime", "Israel Neto", "Kitembo", "Distopia", "PDF", "http://example.com/planos.pdf"),
-    ("O Problema dos Três Corpos", "Cixin Liu", "Suma", "Ficção Científica", "EPUB", "http://example.com/3corpos.epub"),
-    ("A Guerra dos Tronos", "George R. R. Martin", "Leya", "Fantasia", "PDF", "http://example.com/got.pdf"),
-    ("Neuromancer", "William Gibson", "Aleph", "Cyberpunk", "EPUB", "http://example.com/neuromancer.epub"),
-    ("Hibisco Roxo", "Chimamanda Ngozi Adichie", "Companhia das Letras", "Ficção", "PDF", "http://example.com/hibisco.pdf"),
-    ("Flores para Algernon", "Daniel Keyes", "Aleph", "Ficção Científica", "EPUB", "http://example.com/algernon.epub"),
-    ("O Ódio que Você Semeia", "Angie Thomas", "Galera Record", "Jovem Adulto", "PDF", "http://example.com/odio.pdf"),
+    ("O Problema dos Três Corpos", "Cixin Liu", "Suma", "Ficção Científica", 100, "EPUB", "https://zlibrary.com.br/o-problema-dos-tres-corpos-1/#ePUB"),
+    ("A Guerra dos Tronos", "George R. R. Martin", "Leya", "Fantasia", 100, "PDF", "https://zlibrary.com.br/a-guerra-dos-tronos-edicao-ilustrada-exclusiva/#PDF"),
+    ("Neuromancer", "William Gibson", "Aleph", "Cyberpunk", 100, "EPUB", "https://zlibrary.com.br/box-trilogia-sprawl/#EPUB"),
+    ("Hibisco Roxo", "Chimamanda Ngozi Adichie", "Companhia das Letras", "Ficção", 100, "PDF", "https://zlibrary.com.br/hibisco-roxo/#PDF"),
+    ("Flores para Algernon", "Daniel Keyes", "Aleph", "Ficção Científica", 100, "EPUB", "https://zlibrary.com.br/flores-para-algernon/#ePUB"),
+    ("O Ódio que Você Semeia", "Angie Thomas", "Galera Record", "Jovem Adulto", 100, "PDF", "https://zlibrary.com.br/the-hate-u-give-special-collectors-edition/#PDF"),
 ]

@@ -19,8 +19,8 @@ Implementadas
 
 [x] Notificações de Atraso: Enviar notificações automáticas sobre livros atrasados.
 
-Planejadas
+[x] E-books e Recursos Online: Integrar e gerenciar recursos digitais.
 
-[ ] E-books e Recursos Online: Integrar e gerenciar recursos digitais.
+Planejadas
 
 [ ] Relatórios e Análises: Gerar relatórios sobre o uso da biblioteca, livros populares e outras métricas.

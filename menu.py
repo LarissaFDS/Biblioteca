@@ -266,8 +266,11 @@ def menu_membro(biblioteca, membro):
             print("\n--- Minhas multas pendentes ---")
             biblioteca.listar_multas_do_membro(membro)
         elif escolha == '4':
+            biblioteca.listar_ebook()
             titulo = input("Digite o título do eBook que deseja acessar: ")
             biblioteca.acessar_ebook(titulo)
+            
+            time.sleep(2)
         elif escolha == '5':
             biblioteca.listar_eventos()
         elif escolha == '6':

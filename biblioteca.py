@@ -20,6 +20,7 @@ class Biblioteca:
         self.reservas = []
         self.eventos = []
         self.multas = []
+        self.ebook = []
         self.data_atual_simulada = datetime.now()
 
     # ------------------------- MÉTODOS DE CONTROLE DE TEMPO ------------------------------
@@ -269,9 +270,34 @@ class Biblioteca:
                 print("-" * 25)
 
     #--------------------------------- E-BOOK --------------------------------------------------------
+    def cadastrar_ebook(self, titulo, autor, editora, genero, total_exemplares, formato, link_download, silencioso = True) -> Ebook:
+        novo_ebook = Ebook(titulo, autor, editora, genero, total_exemplares, formato, link_download)
+        self.ebook.append(novo_ebook)
+        
+        if not silencioso:
+            print(f"\n✔ Ebook '{titulo}' cadastrado com sucesso no acervo.")
+        return novo_ebook
+    
+    def listar_ebook(self):
+        if not self.ebook:
+            print("Nenhum ebook cadastrado atualmente.\n")
+        else:
+            print("\n---📖 Ebooks cadastrados ---")
+            for ebook in self.ebook:
+                print(ebook)
+                print("-" * 25)
+                
     def acessar_ebook(self, titulo):
-        print("\nℹ️  Funcionalidade de eBook ainda não implementada.")
-        pass
+        titulo_normalizado = remover_acentos(titulo)
+        ebook = next((i for i in self.ebook if remover_acentos(i.titulo) == titulo_normalizado), None)
+
+        if not ebook:
+            print(f"❗️ Ebook '{titulo}' não cadastrado no acervo.")
+            return None
+        else:
+            print(f"Acesse o livro clicando aqui 👉 {ebook.link_download}")
+            return
+        
 
     # ------------------------------- Verificar atrasos da biblioteca -------------------------------
     def notificar_atrasos(self):

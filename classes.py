@@ -105,10 +105,13 @@ class Ebook(Item):
         self.link_download = link_download
 
     def __str__(self) -> str:
-        return (
-            super().__str__() + f"\n  - Formato: {self.formato}\n  - Link para download: {self.link_download}"
-        )
+        info_pai = super().__str__()
+        linhas_pai = info_pai.split('\n')
+        
+        linhas_finais = [linha for linha in linhas_pai if 'Exemplares' not in linha]
+        linhas_finais.append(f"  - Formato: {self.formato}")
 
+        return "\n".join(linhas_finais)
 
 class Multa:
     def __init__(self, emprestimo_atrasado: Emprestimo, valor: float) -> None:

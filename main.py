@@ -13,6 +13,9 @@ if __name__ == "__main__":
     
     for nome, endereco, email in membros_padrao:
         biblioteca.cadastrar_membro(nome, endereco, email, silencioso = True)
+    
+    for titulo, autor, editora, genero, total_exemplares, formato, link_download in ebooks_padrao:
+        biblioteca.cadastrar_ebook(titulo, autor, editora, genero, total_exemplares, formato, link_download, silencioso = True)
         
     print("✔ Carga de dados concluída com sucesso!")
     print("\nBem-vindo ao sistema de biblioteca!")
