@@ -145,7 +145,7 @@ def menu_gerenciar_itens(biblioteca):
     while True:
         print("\n--- 📦 Gerenciamento de Acervo (Admin) ---")
         print("1. Gerenciar Catálogo de Livros")
-        print("2. Gerenciar Circulação de Livros (Empréstimos/Devoluções)")
+        print("2. Gerenciar Circulação de Livros")
         print("3. Voltar")
         escolha = input("Escolha uma opção: ")
 
@@ -164,7 +164,7 @@ def menu_membro(biblioteca, membro):
         print("1. Buscar livro no acervo")
         print("2. Meus empréstimos e devoluções")
         print("3. Minhas multas pendentes")
-        print("4. Acessar eBook (se disponível)")
+        print("4. Acessar eBook")
         print("5. Ver eventos da biblioteca")
         print("6. Sair (Logout)")
         escolha = input("Escolha uma opção: ")
@@ -213,7 +213,7 @@ def menu_administrador(biblioteca):
         print("1. Gerenciar Acervo")
         print("2. Gerenciar Membros")
         print("3. Gerenciar Eventos")
-        print("4. Avançar o tempo no sistema (Time Skip)")
+        print("4. Avançar o tempo no sistema")
         print("5. Sair (Logout)")
         escolha = input("Escolha uma opção: ")
 
