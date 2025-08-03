@@ -17,8 +17,9 @@ Implementadas
 
 [x] Gestão de Eventos: Anunciar e gerenciar eventos da biblioteca.
 
+[x] Notificações de Atraso: Enviar notificações automáticas sobre livros atrasados.
+
 Planejadas
-[ ] Notificações de Atraso: Enviar notificações automáticas sobre livros atrasados.
 
 [ ] E-books e Recursos Online: Integrar e gerenciar recursos digitais.
 

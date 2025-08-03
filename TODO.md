@@ -15,16 +15,10 @@
 -Busca no Catálogo: Os usuários podem pesquisar o catálogo da biblioteca por título, autor, gênero, etc.    CHECK
 -Empréstimo e Devolução: Os usuários podem retirar e devolver livros.                                       CHECK
 -Sistema de Reserva: Os usuários podem reservar livros que estão atualmente emprestados.                    CHECK
-
-
--Notificações de Atraso: Notificações automáticas para itens em atraso.                                  
-
-
+-Notificações de Atraso: Notificações automáticas para itens em atraso.                                     CHECK
 -Gerenciamento de Membros: Cadastro e gerenciamento dos membros da biblioteca.                              CHECK
 -Cálculo e Pagamento de Multas: Cálculo e pagamento de multas por atraso.                                   CHECK
 -Gerenciamento de Acervo: Acompanhamento e gerenciamento do acervo da biblioteca.                           CHECK
-
-
 -Gerenciamento de Eventos: Agendamento e divulgação de eventos da biblioteca.                               CHECK
 -E-books e Recursos Online: Acesso a recursos digitais e e-books.
 -Relatórios e Análises: Geração de relatórios sobre o uso e as tendências da biblioteca.

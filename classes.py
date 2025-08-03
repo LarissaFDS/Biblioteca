@@ -56,8 +56,8 @@ class Emprestimo:
     def __str__(self) -> str:
         return (
             f"  - Empréstimo de '{self.livro.titulo}' para {self.membro.nome}:\n"
-            f"  - Data de Empréstimo: {self.data_emprestimo.strftime('%d/%m/%Y')}\n"
-            f"  - Data Prevista de Devolução: {self.data_devolucao_prevista.strftime('%d/%m/%Y')}"
+            f"  - Data de empréstimo: {self.data_emprestimo.strftime('%d/%m/%Y')}\n"
+            f"  - Data prevista de devolução: {self.data_devolucao_prevista.strftime('%d/%m/%Y')}"
         )     
 
 
@@ -70,7 +70,7 @@ class Evento:
 
     def __str__(self) -> str:
         return (
-            f"  🗓️  Evento: {self.nome}\n"
+            f"  🗓️ Evento: {self.nome}\n"
             f"   - Descrição: {self.descricao}\n"
             f"   - Data: {self.data}\n"
             f"   - Local: {self.local}"
@@ -93,7 +93,7 @@ class Reserva:
 
     def __str__(self):
         return (
-            f"    Reserva de '{self.livro.titulo}' por {self.membro.nome}:\n"
+            f"  - Reserva de '{self.livro.titulo}' por {self.membro.nome}:\n"
             f"  - Data da Reserva: {self.data_reserva.strftime('%d/%m/%Y')}"
         )
 
@@ -125,7 +125,7 @@ class Multa:
     def __str__(self) -> str:
         status_multa = "Paga" if self.pago else "Pendente"
         return (
-            f"   Multa {status_multa} para o livro '{self.emprestimo_atrasado.livro.titulo}':\n"
+            f"  - Multa {status_multa} para o livro '{self.emprestimo_atrasado.livro.titulo}':\n"
             f"  - Membro: {self.emprestimo_atrasado.membro.nome}\n"
             f"  - Valor: R$ {self.valor:.2f}"
         )

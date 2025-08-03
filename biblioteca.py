@@ -24,11 +24,9 @@ class Biblioteca:
 
     # ------------------------- MÉTODOS DE CONTROLE DE TEMPO ------------------------------
     def get_data_atual(self):
-        """Retorna a data atual do sistema (simulada ou real)."""
         return self.data_atual_simulada
 
     def avancar_no_tempo(self, dias: int):
-        """Avança o tempo do sistema em um número específico de dias."""
         if dias <= 0:
             print("Por favor, insira um número de dias maior que zero.")
             return
@@ -44,6 +42,7 @@ class Biblioteca:
         time.sleep(1)
 
         self.verificar_atrasos()
+        self.notificar_atrasos()
 
     #------------------------------- ITEM ------------------------------------------------
     def cadastrar_item(self, titulo, autor, editora, genero, total_exemplares, silencioso = False) -> Item:
@@ -73,7 +72,7 @@ class Biblioteca:
         if not self.reservas:
             print("Nenhuma reserva de livro ativa no momento.")
         else:
-            print("\n--- Lista de Reservas Ativas ---")
+            print("\n--- Lista de reservas ativas ---")
             for reserva in self.reservas:
                 print(reserva)
                 print("-" * 25)
@@ -264,7 +263,7 @@ class Biblioteca:
         if not self.eventos:
             print("Nenhum evento agendado no momento.")
         else:
-            print("\n--- 🗓️ Eventos Agendados ---")
+            print("\n--- 🗓️ Eventos agendados ---")
             for evento in self.eventos:
                 print(evento)
                 print("-" * 25)
@@ -274,24 +273,21 @@ class Biblioteca:
         print("\nℹ️  Funcionalidade de eBook ainda não implementada.")
         pass
 
-    # ------------------------------- Verificar TODAS informações da biblioteca -------------------------------
-    '''def notificar_atrasos(self):
-        """Verifica todos os empréstimos e notifica membros com itens atrasados."""
+    # ------------------------------- Verificar atrasos da biblioteca -------------------------------
+    def notificar_atrasos(self):
         hoje = self.get_data_atual()
         atrasados = [e for e in self.emprestimos if e.data_devolucao_prevista < hoje]
         if not atrasados:
-            print("Nenhum empréstimo atrasado no momento.")
             return
-        print("\n--- Notificações de Atraso ---")
+        print("\n--- Notificações de atraso ---")
         for emprestimo in atrasados:
             dias_atraso = (hoje - emprestimo.data_devolucao_prevista).days
             print(
-                f"⚠️ Membro '{emprestimo.membro.nome}' está com o livro '{emprestimo.livro.titulo}' atrasado há {dias_atraso} dia(s)."
-                f" Data prevista de devolução: {emprestimo.data_devolucao_prevista.strftime('%d/%m/%Y')}"
+                f"⚠️ Notificando membro '{emprestimo.membro.nome}' sobre atraso na devolução do livro '{emprestimo.livro.titulo}'.\nAtrasado há {dias_atraso} dia(s)."
+                f" Data prevista de devolução: {emprestimo.data_devolucao_prevista.strftime('%d/%m/%Y')}\n"
             )
-    '''
+
     def verificar_atrasos(self):
-        """Verifica empréstimos, gera/atualiza multas para atrasos e notifica os membros."""
         hoje = self.get_data_atual()
         atrasados = [e for e in self.emprestimos if e.data_devolucao_prevista < hoje]
 
@@ -299,7 +295,7 @@ class Biblioteca:
             print("✔ Nenhum empréstimo atrasado para gerar multas.")
             return
 
-        print("\n--- Verificação de Atrasos e Geração de Multas ---")
+        print("\n--- Verificação de atrasos e geração de multas ---")
         for emprestimo in atrasados:
             dias_atraso = (hoje - emprestimo.data_devolucao_prevista).days
             if dias_atraso > 0:
