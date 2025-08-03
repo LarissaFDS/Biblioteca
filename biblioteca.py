@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import unicodedata
-import random
+import time
 from classes import Evento, Multa, Ebook, Item, Reserva, Membro, Emprestimo
 
 DIAS_EMPRESTIMO = 14
@@ -20,14 +20,38 @@ class Biblioteca:
         self.reservas = []
         self.eventos = []
         self.multas = []
+        self.data_atual_simulada = datetime.now()
+
+    # ------------------------- MÉTODOS DE CONTROLE DE TEMPO ------------------------------
+    def get_data_atual(self):
+        """Retorna a data atual do sistema (simulada ou real)."""
+        return self.data_atual_simulada
+
+    def avancar_no_tempo(self, dias: int):
+        """Avança o tempo do sistema em um número específico de dias."""
+        if dias <= 0:
+            print("Por favor, insira um número de dias maior que zero.")
+            return
+            
+        self.data_atual_simulada += timedelta(days=dias)
+        print("\n" + "="*45)
+        print(f"⌛️  O tempo avançou {dias} dia(s).")
+        time.sleep(0.5)
+        print(f"📅  A nova data do sistema é: {self.get_data_atual().strftime('%d/%m/%Y')}")
+        time.sleep(0.5)
+        print("="*45)
+        print("\nExecutando verificações automáticas para a nova data...")
+        time.sleep(1)
+
+        self.verificar_atrasos()
 
     #------------------------------- ITEM ------------------------------------------------
     def cadastrar_item(self, titulo, autor, editora, genero, total_exemplares, silencioso = False) -> Item:
         novo_item = Item(titulo, autor, editora, genero, total_exemplares)
         self.item.append(novo_item)
         
-        if not silencioso: #para nao printar o do arcevo
-            print(f"item '{titulo}' cadastrado com sucesso.")
+        if not silencioso:
+            print(f"\n✔ Livro '{titulo}' cadastrado com sucesso no acervo.")
         return novo_item
     
     def buscar_item(self, criterio, valor_busca) -> list:
@@ -47,25 +71,24 @@ class Biblioteca:
     
     def listar_reservas(self) -> None:
         if not self.reservas:
-            print("Nenhum livro reservado.")
+            print("Nenhuma reserva de livro ativa no momento.")
         else:
-            print("\n--- Lista de reservas ---")
+            print("\n--- Lista de Reservas Ativas ---")
             for reserva in self.reservas:
                 print(reserva)
-                print("-" * 20)
-
+                print("-" * 25)
 
     #--------------------------------- MEMBRO -------------------------------------------------------
     def cadastrar_membro(self, nome, endereco, email, silencioso = False) -> Membro:
         if any(m.email == email for m in self.membros):
-            print(f"\nMembro com email {email} já cadastrado.\n\n")
+            print(f"\n❗️ Membro com email '{email}' já cadastrado.")
             return None
         
         novo_membro = Membro(nome, endereco, email)
         self.membros.append(novo_membro)
 
-        if not silencioso: #para nao printar o do arcevo
-            print(f"\n\t{novo_membro.nome} cadastrado com sucesso!\n\n")
+        if not silencioso:
+            print(f"\n✔ Membro '{nome}' cadastrado com sucesso!")
         return novo_membro
     
     def buscar_membro_por_email(self, email) -> Membro:
@@ -75,46 +98,51 @@ class Biblioteca:
         return None
     
     def listar_emprestimos_do_membro(self, membro) -> None:
-        for emprestimo in self.emprestimos:
-            if emprestimo.membro.email == membro.email:
+        emprestimos_do_membro = [e for e in self.emprestimos if e.membro.email == membro.email]
+        if not emprestimos_do_membro:
+            print("Nenhum empréstimo ativo para este membro.")
+            return False
+        else:
+            for emprestimo in emprestimos_do_membro:
                 print(emprestimo)
+                print("-" * 25)
+            return True
 
     def listar_multas_do_membro(self, membro) -> None:
-        for multa in self.multas:
-            if multa.emprestimo_atrasado and multa.valor > 0:
+        multas_do_membro = [m for m in self.multas if m.emprestimo_atrasado.membro.email == membro.email and not m.pago]
+        if not multas_do_membro:
+            print("Nenhuma multa pendente.")
+        else:
+            for multa in multas_do_membro:
                 print(multa)
-            else:
-                print("Nenhuma multa pendente.")
+                print("-" * 25)
     
-
-
     # ------------------------------ EMPRESTIMO e DEVOLUÇÃO ---------------------------------------
-    def realizar_emprestimo(self, email, titulo, data_emprestimo, data_devolucao_prevista) -> Reserva:
-        membro = next((m for m in self.membros if m.email == email), None)
-        
+    def realizar_emprestimo(self, email, titulo) -> Reserva:
+        membro = self.buscar_membro_por_email(email)
         titulo_normalizado = remover_acentos(titulo)
         item = next((i for i in self.item if remover_acentos(i.titulo) == titulo_normalizado), None)
 
         if not membro:
-            print(f"Membro com email {email} não encontrado.")
+            print(f"❗️ Membro com email {email} não encontrado.")
             return None
 
         if not item:
-            print(f"Item '{titulo}' não cadastrado.")
+            print(f"❗️ Livro '{titulo}' não cadastrado no acervo.")
             return None
 
         emprestimos_membro = [e for e in self.emprestimos if e.membro.email == email]
         if len(emprestimos_membro) >= MAXIMO_EMPRESTIMO_MEMBRO:
-            print(f"\t{membro.nome} já possui 3 empréstimos ativos.")
+            print(f"❗️ {membro.nome} já atingiu o limite de {MAXIMO_EMPRESTIMO_MEMBRO} empréstimos ativos.")
+            return None
+        
+        data_emprestimo = self.get_data_atual()
+        if any(remover_acentos(e.livro.titulo) == titulo_normalizado for e in emprestimos_membro):
+            print(f"❗️ {membro.nome} já possui um exemplar do livro '{titulo}' emprestado.")
             return None
 
-        for e in emprestimos_membro:
-            if remover_acentos(e.livro.titulo) == titulo_normalizado and e.data_devolucao_prevista > datetime.now():
-                print(f"\t{membro.nome} já possui o livro '{titulo}' emprestado.")
-                return None
-
         if not item.verificar_disponibilidade():
-            print(f"Item '{titulo}' não disponível para empréstimo atualmente.")
+            print(f"❗️ Livro '{titulo}' não está disponível para empréstimo no momento.")
             opcao = input("Deseja reservar o item para retirada posterior? (sim/não): ").strip().lower()
             if opcao == 'sim':
                 reserva = Reserva(item, membro, data_emprestimo)
@@ -126,73 +154,74 @@ class Biblioteca:
                 return None
 
         if item.emprestar():
+            data_devolucao_prevista = data_emprestimo + timedelta(days=DIAS_EMPRESTIMO)
             emprestimo = Emprestimo(item, membro, data_emprestimo, data_devolucao_prevista)
             self.emprestimos.append(emprestimo)
+            print(f"\n✔ Empréstimo realizado com sucesso!")
             print(emprestimo)
         
     def realizar_devolucao(self, email, titulo) -> None:
-        membro = next((m for m in self.membros if m.email == email), None)
+        membro = self.buscar_membro_por_email(email)
         titulo_normalizado = remover_acentos(titulo)
         emprestimo = next((e for e in self.emprestimos if remover_acentos(e.livro.titulo) == titulo_normalizado and e.membro.email == email), None)
 
         if not membro:
-            print(f"Membro com email {email} não encontrado.")
-            return None
+            print(f"❗️ Membro com email {email} não encontrado.")
+            return
 
         if not emprestimo:
-            print(f"Empréstimo de '{titulo}' não encontrado para o membro {membro.nome}.")
-            return None                    
+            print(f"❗️ Empréstimo do livro '{titulo}' não encontrado para {membro.nome}.")
+            return                    
                
-        #Simular tempo para verificar atrasos e aplicar multa
-        data_real_devolucao = emprestimo.data_devolucao_prevista + timedelta(days=random.randint(-7, 20))
+        data_real_devolucao = self.get_data_atual()
         dias_atraso = (data_real_devolucao - emprestimo.data_devolucao_prevista).days
         
         if dias_atraso > 0:
             valor_multa = dias_atraso * VALOR_MULTA
-            
-            #verifica se o membro já possui multa pendente
-            multa = next((m for m in self.multas if m.emprestimo_atrasado == emprestimo), None)
-            if not multa:
+            multa_existente = next((m for m in self.multas if m.emprestimo_atrasado == emprestimo), None)
+            if not multa_existente:
                 nova_multa = Multa(emprestimo, valor_multa)
                 self.multas.append(nova_multa)
-                print(nova_multa)
+                print(f"❗️ Multa de R$ {valor_multa:.2f} gerada por {dias_atraso} dia(s) de atraso.")
+            else: 
+                multa_existente.valor = valor_multa
+                print(f"❗️ Valor da multa atualizado para R$ {valor_multa:.2f} devido a {dias_atraso} dia(s) de atraso.")
         
-        #verifica com lista se o membro possui multa pendente  
-        multa = [m for m in self.multas if m.emprestimo_atrasado.membro == membro and not m.pago]        
+        multas_pendentes = [m for m in self.multas if m.emprestimo_atrasado.membro.email == email and not m.pago]
         
-        if multa:
-            print(f"\n{membro.nome} possui multa pendente:")
-            for m in multa:
-                print(f" - Multa de R$ {m.valor:.2f} para o livro '{m.emprestimo_atrasado.livro.titulo}'")
+        if multas_pendentes:
+            print(f"\n❗️ {membro.nome}, para concluir a devolução, é necessário quitar as seguintes multas pendentes:")
+            for m in multas_pendentes:
+                print(f"   - Livro: '{m.emprestimo_atrasado.livro.titulo}' | Valor: R$ {m.valor:.2f}")
             
-            if input("Deseja pagar todas as multas pendentes agora? (sim/não): ").strip().lower() == 'sim':
-                if all(m.pagar() for m in multa):
-                    print("Multas pagas com sucesso.")
+            pagar = input("\nDeseja pagar todas as multas agora? (sim/não): ").strip().lower()
+            if pagar == 'sim':
+                for m in multas_pendentes:
+                    m.pagar()
+                print("\n✔ Multas pagas com sucesso.")
+                time.sleep(1)
             else:
-                print("Devolução não realizada devido à multa pendente.")
-                return None
+                print("\n❌ Devolução não pode ser concluída até o pagamento das multas.")
+                return
        
-        #se a multa foi paga ou não existe, realiza a devolução     
         emprestimo.livro.devolver()
         self.emprestimos.remove(emprestimo)
+        print(f"\n✔ Devolução do livro '{titulo}' registrada com sucesso.")
         
-        #Se o livro tiver reservado, notifica o membro e faz o emprestimo
         for reserva in self.reservas[:]:
             if remover_acentos(reserva.livro.titulo) == titulo_normalizado:
-                print(f"\nLivro reservado disponível! Notificando {reserva.membro.nome}.")
-                reserva.cancelar_reserva()
-                self.realizar_emprestimo(reserva.membro.email, reserva.livro.titulo, reserva.data_reserva + timedelta(days=DIAS_EMPRESTIMO), emprestimo.data_devolucao_prevista)
+                print(f"\n🔔 Notificação: O livro '{reserva.livro.titulo}' ficou disponível e foi emprestado para {reserva.membro.nome}, que estava na fila de reserva.")
                 self.reservas.remove(reserva)
+                self.realizar_emprestimo(reserva.membro.email, reserva.livro.titulo)
                 break
-
-
+    
     # ------------------------------ EVENTOS -----------------------------------------------    
-    def agendar_evento(self, nome, descricao, data, local, silencioso = False):
+    def agendar_evento(self, nome, descricao, data, local, silencioso=False):
         novo_evento = Evento(nome, descricao, data, local)
         self.eventos.append(novo_evento)
         
-        if not silencioso: #para nao printar o do arcevo
-            print(f"Evento '{nome}' agendado com sucesso.")
+        if not silencioso:
+            print(f"✔ Evento '{nome}' agendado com sucesso.")
         return novo_evento
     
     def divulgar_eventos(self):
@@ -203,56 +232,52 @@ class Biblioteca:
             print("Nenhum membro cadastrado para notificação.")
             return
         
-        #coletar o nome de todos os membros em uma lista
         nomes_membros = [membro.nome for membro in self.membros]
         
-        #formatar a string pra exibição, dependendo do número de membros
-        if len(nomes_membros) == 1: #um único membro
-            nomes_membros = nomes_membros[0]
-        elif len(nomes_membros) == 2: #dois membros, então só tem e
-            nomes_membros = " e ".join(nomes_membros)
-        else:#mais de dois membros, então usa vírgula e e
-            nomes_membros = ", ".join(nomes_membros[:-1]) + " e " + nomes_membros[-1]
+        if len(nomes_membros) == 1:
+            nomes_membros_str = nomes_membros[0]
+        elif len(nomes_membros) == 2:
+            nomes_membros_str = " e ".join(nomes_membros)
+        else:
+            nomes_membros_str = ", ".join(nomes_membros[:-1]) + " e " + nomes_membros[-1]
         
-        #criei uma lista para limitar a divulgação a 5 eventos
         eventos_para_divulgar = self.eventos[:5]
         num_eventos = len(eventos_para_divulgar)
         
-        print(f"\nDivulgando {num_eventos} evento(s) para os membros: {nomes_membros}")
+        print(f"\nDivulgando {num_eventos} evento(s) para os membros: {nomes_membros_str}")
         print("-" * 40)
         for evento in eventos_para_divulgar:
             print(evento)
             print("-" * 20)
+            time.sleep(0.7)
     
     def cancelar_evento(self, nome_evento):
-        nome_evento = remover_acentos(nome_evento)
-        nome_evento = nome_evento.lower()
-        evento = next((e for e in self.eventos if remover_acentos(e.nome).lower() == nome_evento), None)
+        nome_evento_normalizado = remover_acentos(nome_evento).lower()
+        evento = next((e for e in self.eventos if remover_acentos(e.nome).lower() == nome_evento_normalizado), None)
         if evento:
             self.eventos.remove(evento)
-            print(f"Evento '{nome_evento}' cancelado com sucesso.")
+            print(f"✔ Evento '{evento.nome}' cancelado com sucesso.")
         else:
-            print(f"Evento '{nome_evento}' não encontrado.")
+            print(f"❗️ Evento '{nome_evento}' não encontrado.")
     
     def listar_eventos(self):
         if not self.eventos:
-            print("Nenhum evento agendado.")
+            print("Nenhum evento agendado no momento.")
         else:
-            print("\n--- Eventos Agendados ---")
+            print("\n--- 🗓️ Eventos Agendados ---")
             for evento in self.eventos:
                 print(evento)
-                print("-" * 20)
-
+                print("-" * 25)
 
     #--------------------------------- E-BOOK --------------------------------------------------------
     def acessar_ebook(self, titulo):
+        print("\nℹ️  Funcionalidade de eBook ainda não implementada.")
         pass
 
-
     # ------------------------------- Verificar TODAS informações da biblioteca -------------------------------
-    def notificar_atrasos(self):
+    '''def notificar_atrasos(self):
         """Verifica todos os empréstimos e notifica membros com itens atrasados."""
-        hoje = datetime.now()
+        hoje = self.get_data_atual()
         atrasados = [e for e in self.emprestimos if e.data_devolucao_prevista < hoje]
         if not atrasados:
             print("Nenhum empréstimo atrasado no momento.")
@@ -264,40 +289,32 @@ class Biblioteca:
                 f"⚠️ Membro '{emprestimo.membro.nome}' está com o livro '{emprestimo.livro.titulo}' atrasado há {dias_atraso} dia(s)."
                 f" Data prevista de devolução: {emprestimo.data_devolucao_prevista.strftime('%d/%m/%Y')}"
             )
-
-       
-    
-    def verificar_atrasos(self, dias_skip=0):
-        """
-        Verifica todos os empréstimos, gera multas para atrasos e notifica os membros.
-        O parâmetro dias_skip permite simular a passagem do tempo.
-        """
-        hoje = datetime.now() + timedelta(days=dias_skip)
+    '''
+    def verificar_atrasos(self):
+        """Verifica empréstimos, gera/atualiza multas para atrasos e notifica os membros."""
+        hoje = self.get_data_atual()
         atrasados = [e for e in self.emprestimos if e.data_devolucao_prevista < hoje]
+
         if not atrasados:
-            print("Nenhum empréstimo atrasado no momento.")
+            print("✔ Nenhum empréstimo atrasado para gerar multas.")
             return
 
-        print("\n--- Verificação de Atrasos ---")
+        print("\n--- Verificação de Atrasos e Geração de Multas ---")
         for emprestimo in atrasados:
             dias_atraso = (hoje - emprestimo.data_devolucao_prevista).days
             if dias_atraso > 0:
                 valor_multa = dias_atraso * VALOR_MULTA
-                # Verifica se já existe multa para este empréstimo
                 multa_existente = next((m for m in self.multas if m.emprestimo_atrasado == emprestimo), None)
                 if not multa_existente:
                     nova_multa = Multa(emprestimo, valor_multa)
                     self.multas.append(nova_multa)
                     print(
-                        f"⚠️ Membro '{emprestimo.membro.nome}' está com o livro '{emprestimo.livro.titulo}' atrasado há {dias_atraso} dia(s)."
-                        f" Multa gerada: R$ {valor_multa:.2f}."
+                        f"🔴 Multa GERADA para '{emprestimo.membro.nome}' pelo atraso de '{emprestimo.livro.titulo}'.\n"
+                        f"   - Valor: R$ {valor_multa:.2f} ({dias_atraso} dias de atraso)."
                     )
                 else:
+                    multa_existente.valor = valor_multa
                     print(
-                        f"⚠️ Membro '{emprestimo.membro.nome}' continua com o livro '{emprestimo.livro.titulo}' atrasado há {dias_atraso} dia(s)."
-                        f" Multa já registrada: R$ {multa_existente.valor:.2f}."
+                        f"🟡 Multa ATUALIZADA para '{emprestimo.membro.nome}' pelo atraso de '{emprestimo.livro.titulo}'.\n"
+                        f"   - Novo Valor: R$ {valor_multa:.2f} ({dias_atraso} dias de atraso)."
                     )
-  
-    
-    def gerar_relatorio_uso(self):
-        pass

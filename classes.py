@@ -14,17 +14,13 @@ class Item:
         #Registra o empréstimo de um exemplar, diminuindo a quantidade disponíveis.
         if self.verificar_disponibilidade():
             self.exemplares_disponiveis -= 1
-            print(f"Empréstimo do livro '{self.titulo}' realizado com sucesso.")
             return True
-        else:
-            print(f"Não há exemplares de '{self.titulo}' disponíveis para empréstimo.")
-            return False
+        return False
 
     def devolver(self) -> None:
         #Registra a devolução de um exemplar, aumentando a quantidade disponíveis.
         if self.exemplares_disponiveis < self.total_exemplares:
             self.exemplares_disponiveis += 1
-            print(f"Devolução do livro '{self.titulo}' registrada com sucesso.")
         else:
             print(f"Todos os exemplares de '{self.titulo}' já se encontram no acervo.")
     
@@ -44,9 +40,9 @@ class Membro:
     
     def __str__(self):
         return (
-            f"  - Membro: {self.nome}\n"
-            f"  - Endereço: {self.endereco}\n"
-            f"  - Email: {self.email}"
+            f"  👤 Membro: {self.nome}\n"
+            f"   - Endereço: {self.endereco}\n"
+            f"   - Email: {self.email}"
         )
        
 
@@ -59,7 +55,7 @@ class Emprestimo:
         
     def __str__(self) -> str:
         return (
-            f"  - Empréstimo de '{self.livro.titulo}' por {self.membro.nome}:\n"
+            f"  - Empréstimo de '{self.livro.titulo}' para {self.membro.nome}:\n"
             f"  - Data de Empréstimo: {self.data_emprestimo.strftime('%d/%m/%Y')}\n"
             f"  - Data Prevista de Devolução: {self.data_devolucao_prevista.strftime('%d/%m/%Y')}"
         )     
@@ -74,10 +70,10 @@ class Evento:
 
     def __str__(self) -> str:
         return (
-            f"  Evento: {self.nome}\n"
-            f"  - Descrição: {self.descricao}\n"
-            f"  - Data: {self.data}\n"
-            f"  - Local: {self.local}"
+            f"  🗓️  Evento: {self.nome}\n"
+            f"   - Descrição: {self.descricao}\n"
+            f"   - Data: {self.data}\n"
+            f"   - Local: {self.local}"
         )   
              
           
@@ -89,7 +85,7 @@ class Reserva:
 
     def confirmar_reserva(self):
         self.status = "confirmada"
-        print(f"Reserva confirmada para {self.membro.nome} - Livro: {self.livro.titulo}")
+        print(f"✔ Reserva confirmada para {self.membro.nome} - Livro: {self.livro.titulo}")
 
     def cancelar_reserva(self):
         self.status = "cancelada"
@@ -127,8 +123,9 @@ class Multa:
         return False
         
     def __str__(self) -> str:
+        status_multa = "Paga" if self.pago else "Pendente"
         return (
-            f"   Multa {'paga' if self.pago else 'pendente'} para o livro '{self.emprestimo_atrasado.livro.titulo}':\n"
+            f"   Multa {status_multa} para o livro '{self.emprestimo_atrasado.livro.titulo}':\n"
             f"  - Membro: {self.emprestimo_atrasado.membro.nome}\n"
             f"  - Valor: R$ {self.valor:.2f}"
         )
