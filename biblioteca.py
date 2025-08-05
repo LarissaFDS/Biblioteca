@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 import unicodedata
 import time
+from collections import Counter
+
 from classes import Evento, Multa, Ebook, Item, Reserva, Membro, Emprestimo
 
 DIAS_EMPRESTIMO = 14
@@ -22,6 +24,7 @@ class Biblioteca:
         self.multas = []
         self.ebook = []
         self.data_atual_simulada = datetime.now()
+        self.historico_emprestimo = []
 
     # ------------------------- MÉTODOS DE CONTROLE DE TEMPO ------------------------------
     def get_data_atual(self):
@@ -205,6 +208,7 @@ class Biblioteca:
                 return
        
         emprestimo.livro.devolver()
+        self.historico_emprestimo.append(emprestimo)
         self.emprestimos.remove(emprestimo)
         print(f"\n✔ Devolução do livro '{titulo}' registrada com sucesso.")
         
@@ -282,7 +286,7 @@ class Biblioteca:
         if not self.ebook:
             print("Nenhum ebook cadastrado atualmente.\n")
         else:
-            print("\n---📖 Ebooks cadastrados ---")
+            print("\n--- 📖 Ebooks cadastrados ---")
             for ebook in self.ebook:
                 print(ebook)
                 print("-" * 25)
@@ -340,3 +344,60 @@ class Biblioteca:
                         f"🟡 Multa ATUALIZADA para '{emprestimo.membro.nome}' pelo atraso de '{emprestimo.livro.titulo}'.\n"
                         f"   - Novo Valor: R$ {valor_multa:.2f} ({dias_atraso} dias de atraso)."
                     )
+
+
+    #------------------------------- Relatório de uso ---------------------------------------------------
+    def relatorio_uso(self):
+        print("\n" + "=" * 30)
+        print("📑 Relatório de uso da biblioteca")
+        print("=" * 30 + "")
+        
+        todos_emprestimos = self.historico_emprestimo + self.emprestimos
+        
+        if not todos_emprestimos:
+            print("😩 Nenhuma atividade para gerar relatório")
+            return
+        
+        print("\n--- Atividade dos itens ---\n")
+        titulos_emprestados = [e.livro.titulo for e in todos_emprestimos]
+        contagem_livro = Counter(titulos_emprestados)
+        print("📖 Top 5 livros mais emprestados\n")
+        for livro, count in contagem_livro.most_common(5):
+            print(f" - {livro} ({count} vezes)")
+            
+        genero_emprestados = [e.livro.genero for e in todos_emprestimos]
+        contagem_genero = Counter(genero_emprestados)
+        print("\n\n👀 Top 3 genêros mais populares\n")
+        for genero, count in contagem_genero.most_common(3):
+            print(f" - {genero} ({count} vezes)")
+        
+        
+        print("\n--- Atividade dos membros ---\n")
+        membros_ativos = [e.membro.nome for e in todos_emprestimos]
+        contagem_membros = Counter(membros_ativos)
+        print("🏆 Top 3 membros mais ativos:\n")
+        for membro, count in contagem_membros.most_common(3):
+            print(f"  - {membro} ({count} empréstimos)")
+            
+            
+        print("\n--- Análise de multas ---\n")
+        
+        total_multas_geradas = sum(m.valor for m in self.multas)
+        total_multas_pagas = sum(m.valor for m in self.multas if m.pago)
+        print(f"  - 💰 Valor total de multas geradas: R$ {total_multas_geradas:.2f}")
+        print(f"  - 🤑 Valor total de multas pagas: R$ {total_multas_pagas:.2f}")
+        
+        if self.multas:
+            taxa_pagamento = (total_multas_pagas / total_multas_geradas * 100) if total_multas_geradas > 0 else 0
+            print(f"  - 🪙 Taxa de pagamento de multas: {taxa_pagamento:.1f}%")
+
+
+        print("\n\n--- Estatísticas Gerais ---")
+        print(f"  - Número total de livros no acervo: {len(self.item)}")
+        print(f"  - Número total de membros: {len(self.membros)}")
+        print(f"  - Total de empréstimos realizados (histórico): {len(todos_emprestimos)}")
+        print(f"  - Livros atualmente emprestados: {len(self.emprestimos)}")
+
+        print("\n" + "="*30)
+        print("Relatório gerado com sucesso!")
+        print("="*30)                

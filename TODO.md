@@ -20,8 +20,8 @@
 -Cálculo e Pagamento de Multas: Cálculo e pagamento de multas por atraso.                                   CHECK
 -Gerenciamento de Acervo: Acompanhamento e gerenciamento do acervo da biblioteca.                           CHECK
 -Gerenciamento de Eventos: Agendamento e divulgação de eventos da biblioteca.                               CHECK
--E-books e Recursos Online: Acesso a recursos digitais e e-books.
--Relatórios e Análises: Geração de relatórios sobre o uso e as tendências da biblioteca.
+-E-books e Recursos Online: Acesso a recursos digitais e e-books.                                           CHECK
+-Relatórios e Análises: Geração de relatórios sobre o uso e as tendências da biblioteca.                    CHECK 
 
 
 ## Classes

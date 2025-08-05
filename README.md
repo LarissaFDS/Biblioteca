@@ -21,6 +21,7 @@ Implementadas
 
 [x] E-books e Recursos Online: Integrar e gerenciar recursos digitais.
 
+[x] Relatórios e Análises: Gerar relatórios sobre o uso da biblioteca, livros populares e outras métricas.
+
 Planejadas
 
-[ ] Relatórios e Análises: Gerar relatórios sobre o uso da biblioteca, livros populares e outras métricas.

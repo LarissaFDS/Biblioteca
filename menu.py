@@ -52,7 +52,8 @@ def menu_administrador(biblioteca):
         print("2. Gerenciar membros")
         print("3. Gerenciar eventos")
         print("4. Avançar o tempo no sistema")
-        print("5. Logout")
+        print("5. Ver relatório de uso")
+        print("6. Logout")
         escolha = input("Escolha uma opção: ")
 
         if escolha == '1':
@@ -68,6 +69,8 @@ def menu_administrador(biblioteca):
             except ValueError:
                 print("Entrada inválida. Por favor, digite um número inteiro.")
         elif escolha == '5':
+            biblioteca.relatorio_uso()
+        elif escolha == '6':
             print("Fazendo logout de administrador...")
             time.sleep(1)
             break
@@ -269,7 +272,6 @@ def menu_membro(biblioteca, membro):
             biblioteca.listar_ebook()
             titulo = input("Digite o título do eBook que deseja acessar: ")
             biblioteca.acessar_ebook(titulo)
-            
             time.sleep(2)
         elif escolha == '5':
             biblioteca.listar_eventos()
