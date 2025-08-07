@@ -74,7 +74,7 @@ Siga os passos abaixo para executar o sistema em sua máquina local.
 2. Entrar como membro  
 3. Cadastrar novo membro  
 4. Sair do sistema  
-5. Escolha uma opção:
+Escolha uma opção:
 
 **Menu do administrador:**
 
