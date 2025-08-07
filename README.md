@@ -33,6 +33,7 @@ O sistema oferece todos os requisitos do projeto:
 ## 📂 Estrutura do projeto
 
 O código é organizado nos seguintes arquivos para uma melhor manutenibilidade:
+
 ├── main.py               # Ponto de entrada da aplicação, carrega os dados e inicia o menu.  
 ├── biblioteca.py         # Contém a classe principal "Biblioteca", o cérebro do sistema.  
 ├── classes.py            # Define todas as estruturas de dados (Item, Membro, Emprestimo, etc.).  
