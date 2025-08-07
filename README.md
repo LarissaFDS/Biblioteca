@@ -3,6 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.x-blue.svg)
 
 Um sistema de software para a gestão completa de uma biblioteca. O projeto permite o controle de acervo, empréstimos, membros, eventos e finanças.
+
 ---
 
 ## ✨ Funcionalidades principais
@@ -29,19 +30,19 @@ O sistema oferece todos os requisitos do projeto:
 
 ---
 
-## 📂 Estrutura do Projeto
+## 📂 Estrutura do projeto
 
 O código é organizado nos seguintes arquivos para uma melhor manutenibilidade:
-├── main.py               # Ponto de entrada da aplicação, carrega os dados e inicia o menu.
-├── biblioteca.py         # Contém a classe principal "Biblioteca", o cérebro do sistema.
-├── classes.py            # Define todas as estruturas de dados (Item, Membro, Emprestimo, etc.).
-├── menu.py               # Controla a lógica de navegação e a interface com o usuário.
-├── arcevo_padrao.py      # Contém os dados iniciais para popular o sistema na primeira execução.
+├── main.py               # Ponto de entrada da aplicação, carrega os dados e inicia o menu.  
+├── biblioteca.py         # Contém a classe principal "Biblioteca", o cérebro do sistema.  
+├── classes.py            # Define todas as estruturas de dados (Item, Membro, Emprestimo, etc.).  
+├── menu.py               # Controla a lógica de navegação e a interface com o usuário.  
+├── arcevo_padrao.py      # Contém os dados iniciais para popular o sistema na primeira execução.  
 └── README.md             # Este arquivo.
 
 ---
 
-## 🚀 Como Executar
+## 🚀 Como executar
 
 Siga os passos abaixo para executar o sistema em sua máquina local.
 
@@ -57,31 +58,32 @@ Siga os passos abaixo para executar o sistema em sua máquina local.
     ```
 4.  O sistema será iniciado e os dados padrão serão carregados.
 
-### Acesso de Administrador
+### Acesso de administrador
 * Para acessar as funcionalidades administrativas, utilize a senha: `admin123`
 
 ---
 
-## 🖥️ Demonstração de Uso
+## 🖥️ Demonstração de uso
 
-**Menu Principal:**
+**Menu principal:**
 
 ---- Sistema de gerenciamento da biblioteca ----
 
-1. Entrar como administrador
-2. Entrar como membro
-3. Cadastrar novo membro
-4. Sair do sistema
+1. Entrar como administrador  
+2. Entrar como membro  
+3. Cadastrar novo membro  
+4. Sair do sistema  
 5. Escolha uma opção:
 
-**Menu do Administrador:**
---- 👑 Menu do administrador ---
+**Menu do administrador:**
+
+--- 👑 Menu do administrador ---  
 Data atual do sistema: 06/08/2025
 
-1. Gerenciar acervo
-2. Gerenciar membros
-3. Gerenciar eventos
-4. Avançar o tempo no sistema
-5. Gerar relatório de uso
-6. Logout
+1. Gerenciar acervo  
+2. Gerenciar membros  
+3. Gerenciar eventos  
+4. Avançar o tempo no sistema  
+5. Gerar relatório de uso  
+6. Logout  
 Escolha uma opção:
